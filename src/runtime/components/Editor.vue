@@ -33,17 +33,6 @@ const editor = useEditor({
       allowBase64: true,
     }),
   ],
-  onPaste: (event, slice) => {
-    console.log(event)
-    // const items = (event.clipboardData || window.clipboardData).items
-
-    const isImage = items.some((item) => item.type.indexOf('image') !== -1)
-    console.log('isImage', isImage)
-
-    if (isImage) {
-      // event.preventDefault()
-    }
-  },
 })
 </script>
 
