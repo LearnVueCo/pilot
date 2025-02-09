@@ -8,9 +8,13 @@ import Command from '../extensions/command'
 import suggestion from '../extensions/suggestion'
 
 const editor = useEditor({
-  content: '',
+  content: '<h1></h1>',
   extensions: [
-    StarterKit,
+    StarterKit.configure({
+      heading: {
+        levels: [1, 2, 3],
+      },
+    }),
     Placeholder.configure({
       placeholder: ({ node }) => {
         if (node.type.name === 'heading') {
@@ -44,7 +48,7 @@ const editor = useEditor({
 </script>
 
 <template>
-  <div style="min-height: 100vh">
+  <div style="min-height: 100vh; padding: 4rem">
     <editor-content :editor="editor" />
   </div>
 </template>
