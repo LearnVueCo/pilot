@@ -1,14 +1,15 @@
-import { VueRenderer } from '@tiptap/vue-3'
-import tippy from 'tippy.js'
+import { type Editor, type Range, VueRenderer } from '@tiptap/vue-3'
+import type { SuggestionProps } from '@tiptap/suggestion'
+import tippy, { type Instance, type Props } from 'tippy.js'
 
 import CommandsList from './CommandsList.vue'
 
 export default {
-  items: ({ query }) => {
+  items: ({ query }: { query: string }) => {
     return [
       {
         title: 'Heading 1',
-        command: ({ editor, range }) => {
+        command: ({ editor, range }: { editor: Editor, range: Range }) => {
           editor
             .chain()
             .focus()
@@ -19,7 +20,7 @@ export default {
       },
       {
         title: 'Heading 2',
-        command: ({ editor, range }) => {
+        command: ({ editor, range }: { editor: Editor, range: Range }) => {
           editor
             .chain()
             .focus()
@@ -30,7 +31,7 @@ export default {
       },
       {
         title: 'Bold',
-        command: ({ editor, range }) => {
+        command: ({ editor, range } : { editor: Editor, range: Range }) => {
           editor
             .chain()
             .focus()
@@ -38,10 +39,11 @@ export default {
             .setMark('bold')
             .run()
         },
+        class: 'font-bold',
       },
       {
         title: 'Italic',
-        command: ({ editor, range }) => {
+        command: ({ editor, range }: { editor: Editor, range: Range }) => {
           editor
             .chain()
             .focus()
@@ -49,13 +51,14 @@ export default {
             .setMark('italic')
             .run()
         },
+        class: 'italic',
       },
     ].filter(item => item.title.toLowerCase().startsWith(query.toLowerCase())).slice(0, 10)
   },
 
   render: () => {
-    let component
-    let popup
+    let component: VueRenderer
+    let popup: Instance<Props>[]
 
     return {
       onStart: props => {
@@ -74,7 +77,7 @@ export default {
         popup = tippy('body', {
           getReferenceClientRect: props.clientRect,
           appendTo: () => document.body,
-          content: component.element,
+          content: component.element!,
           showOnCreate: true,
           interactive: true,
           trigger: 'manual',

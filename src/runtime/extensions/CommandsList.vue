@@ -2,7 +2,7 @@
   <div class="dropdown-menu">
     <template v-if="items.length">
       <button
-        :class="{ 'is-selected': index === selectedIndex }"
+        :class="{ 'is-selected': index === selectedIndex, [item.class]: true }"
         v-for="(item, index) in items"
         :key="index"
         @click="selectItem(index)"
@@ -84,37 +84,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-/* Dropdown menu */
-.dropdown-menu {
-  background: #ffffff; /* replaced var(--white) */
-  border: 1px solid #d3d3d3; /* replaced var(--gray-1) */
-  border-radius: 0.7rem;
-  box-shadow: 0 4px 8px #0000001A; /* replaced var(--shadow): black at ~10% opacity */
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  overflow: auto;
-  padding: 0.4rem;
-  position: relative;
-}
-
-.dropdown-menu button {
-  align-items: center;
-  background-color: transparent;
-  display: flex;
-  gap: 0.25rem;
-  text-align: left;
-  width: 100%;
-}
-
-.dropdown-menu button:hover,
-.dropdown-menu button:hover.is-selected {
-  background-color: #b3b3b3; /* replaced var(--gray-3) */
-}
-
-.dropdown-menu button.is-selected {
-  background-color: #cccccc; /* replaced var(--gray-2) */
-}
-</style>
