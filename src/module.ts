@@ -1,4 +1,9 @@
-import { defineNuxtModule, addPlugin, createResolver, addComponentsDir } from '@nuxt/kit'
+import {
+  defineNuxtModule,
+  addPlugin,
+  createResolver,
+  addComponentsDir,
+} from '@nuxt/kit'
 import { consola } from 'consola'
 // Module options TypeScript interface definition
 export interface ModuleOptions {}
@@ -19,6 +24,8 @@ export default defineNuxtModule<ModuleOptions>({
     addComponentsDir({
       path: resolver.resolve('./runtime/components'),
     })
-    nuxt.options.css.push(resolver.resolve('./runtime/assets/styles/editor.css'))
+    nuxt.options.css.push(
+      resolver.resolve('./runtime/assets/styles/editor.css'),
+    )
   },
 })

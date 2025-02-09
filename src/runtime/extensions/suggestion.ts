@@ -9,7 +9,7 @@ export default {
     return [
       {
         title: 'Heading 1',
-        command: ({ editor, range }: { editor: Editor, range: Range }) => {
+        command: ({ editor, range }: { editor: Editor; range: Range }) => {
           editor
             .chain()
             .focus()
@@ -20,7 +20,7 @@ export default {
       },
       {
         title: 'Heading 2',
-        command: ({ editor, range }: { editor: Editor, range: Range }) => {
+        command: ({ editor, range }: { editor: Editor; range: Range }) => {
           editor
             .chain()
             .focus()
@@ -31,29 +31,23 @@ export default {
       },
       {
         title: 'Bold',
-        command: ({ editor, range } : { editor: Editor, range: Range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setMark('bold')
-            .run()
+        command: ({ editor, range }: { editor: Editor; range: Range }) => {
+          editor.chain().focus().deleteRange(range).setMark('bold').run()
         },
         class: 'font-bold',
       },
       {
         title: 'Italic',
-        command: ({ editor, range }: { editor: Editor, range: Range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setMark('italic')
-            .run()
+        command: ({ editor, range }: { editor: Editor; range: Range }) => {
+          editor.chain().focus().deleteRange(range).setMark('italic').run()
         },
         class: 'italic',
       },
-    ].filter(item => item.title.toLowerCase().startsWith(query.toLowerCase())).slice(0, 10)
+    ]
+      .filter((item) =>
+        item.title.toLowerCase().startsWith(query.toLowerCase()),
+      )
+      .slice(0, 10)
   },
 
   render: () => {
@@ -61,7 +55,7 @@ export default {
     let popup: Instance<Props>[]
 
     return {
-      onStart: props => {
+      onStart: (props) => {
         component = new VueRenderer(CommandsList, {
           // using vue 2:
           // parent: this,

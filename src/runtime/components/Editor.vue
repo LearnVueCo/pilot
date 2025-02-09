@@ -13,13 +13,12 @@ const editor = useEditor({
     StarterKit,
     Placeholder.configure({
       placeholder: ({ node }) => {
-        if (node.type.name === "heading") {
+        if (node.type.name === 'heading') {
           return `Heading ${node.attrs.level}`
         }
         return "Start typing, press '/' for commands"
       },
       includeChildren: true,
-
     }),
     GlobalDragHandle,
     Command.configure({

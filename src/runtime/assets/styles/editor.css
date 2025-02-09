@@ -1,4 +1,4 @@
-.tiptap .is-empty::before  {
+.tiptap .is-empty::before {
   color: #adb5bd;
   content: attr(data-placeholder);
   float: left;
