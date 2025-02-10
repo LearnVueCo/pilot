@@ -39,7 +39,8 @@
     "@tiptap/suggestion": "^2.11.5",
     "@tiptap/vue-3": "^2.11.5",
     "tippy.js": "^6.3.7",
-    "tiptap-extension-global-drag-handle": "^0.1.16"
+    "tiptap-extension-global-drag-handle": "^0.1.16",
+    "tiptap-markdown": "^0.8.10"
   },
   "devDependencies": {
     "@nuxt/devtools": "^2.0.0",
