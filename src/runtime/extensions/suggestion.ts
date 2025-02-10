@@ -1,11 +1,19 @@
 import { type Editor, type Range, VueRenderer } from '@tiptap/vue-3'
-import type { SuggestionProps } from '@tiptap/suggestion'
-import tippy, { type Instance, type Props } from 'tippy.js'
+import {
+  Suggestion,
+  type SuggestionKeyDownProps,
+  type SuggestionProps,
+} from '@tiptap/suggestion'
+import tippy, {
+  type GetReferenceClientRect,
+  type Instance,
+  type Props,
+} from 'tippy.js'
 
 import CommandsList from './CommandsList.vue'
 
 export default {
-  items: ({ query }: { query: string }) => {
+  items: ({ query }: { query: string }): Partial<typeof Suggestion>[] => {
     return [
       {
         title: 'Heading 1',
@@ -49,13 +57,12 @@ export default {
       )
       .slice(0, 10)
   },
-
   render: () => {
     let component: VueRenderer
     let popup: Instance<Props>[]
 
     return {
-      onStart: (props) => {
+      onStart: (props: SuggestionProps) => {
         component = new VueRenderer(CommandsList, {
           // using vue 2:
           // parent: this,
@@ -69,7 +76,7 @@ export default {
         }
 
         popup = tippy('body', {
-          getReferenceClientRect: props.clientRect,
+          getReferenceClientRect: props.clientRect as GetReferenceClientRect,
           appendTo: () => document.body,
           content: component.element!,
           showOnCreate: true,
@@ -79,7 +86,7 @@ export default {
         })
       },
 
-      onUpdate(props) {
+      onUpdate(props: SuggestionProps) {
         component.updateProps(props)
 
         if (!props.clientRect) {
@@ -87,11 +94,11 @@ export default {
         }
 
         popup[0].setProps({
-          getReferenceClientRect: props.clientRect,
+          getReferenceClientRect: props.clientRect as GetReferenceClientRect,
         })
       },
 
-      onKeyDown(props) {
+      onKeyDown(props: SuggestionKeyDownProps) {
         if (props.event.key === 'Escape') {
           popup[0].hide()
 
