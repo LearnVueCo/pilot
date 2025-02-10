@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEditor, EditorContent } from '@tiptap/vue-3'
+import { useEditor, EditorContent, BubbleMenu } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle'
@@ -38,6 +38,32 @@ const editor = useEditor({
 
 <template>
   <div style="min-height: 100vh; padding: 4rem">
+    <bubble-menu
+      :editor="editor"
+      :tippy-options="{ duration: 100 }"
+      v-if="editor"
+    >
+      <div class="bubble-menu">
+        <button
+          @click="editor.chain().focus().toggleBold().run()"
+          :class="{ 'is-active': editor.isActive('bold') }"
+        >
+          Bold
+        </button>
+        <button
+          @click="editor.chain().focus().toggleItalic().run()"
+          :class="{ 'is-active': editor.isActive('italic') }"
+        >
+          Italic
+        </button>
+        <button
+          @click="editor.chain().focus().toggleStrike().run()"
+          :class="{ 'is-active': editor.isActive('strike') }"
+        >
+          Strike
+        </button>
+      </div>
+    </bubble-menu>
     <editor-content :editor="editor" />
   </div>
 </template>
