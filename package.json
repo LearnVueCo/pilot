@@ -38,6 +38,7 @@
     "@tiptap/starter-kit": "^2.11.5",
     "@tiptap/suggestion": "^2.11.5",
     "@tiptap/vue-3": "^2.11.5",
+    "defu": "^6.1.4",
     "tippy.js": "^6.3.7",
     "tiptap-extension-global-drag-handle": "^0.1.16",
     "tiptap-markdown": "^0.8.10"

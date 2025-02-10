@@ -3,6 +3,7 @@ import {
   addPlugin,
   createResolver,
   addComponentsDir,
+  addImports,
 } from '@nuxt/kit'
 import { consola } from 'consola'
 // Module options TypeScript interface definition
@@ -24,6 +25,12 @@ export default defineNuxtModule<ModuleOptions>({
     addComponentsDir({
       path: resolver.resolve('./runtime/components'),
     })
+    addImports({
+      name: 'useEditor',
+      as: 'useEditor',
+      from: resolver.resolve('./runtime/composables/useEditor'),
+    })
+    console.log('here')
     nuxt.options.css.push(
       resolver.resolve('./runtime/assets/styles/editor.css'),
     )
