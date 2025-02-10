@@ -17,7 +17,6 @@ export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: {},
   setup(_options, nuxt) {
-    consola.info('pencil module active.')
     const resolver = createResolver(import.meta.url)
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
@@ -30,7 +29,6 @@ export default defineNuxtModule<ModuleOptions>({
       as: 'useEditor',
       from: resolver.resolve('./runtime/composables/useEditor'),
     })
-    console.log('here')
     nuxt.options.css.push(
       resolver.resolve('./runtime/assets/styles/editor.css'),
     )
