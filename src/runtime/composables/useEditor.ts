@@ -3,6 +3,8 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle'
 import Image from '@tiptap/extension-image'
+import TaskItem from '@tiptap/extension-task-item'
+import TaskList from '@tiptap/extension-task-list'
 import { Markdown } from 'tiptap-markdown'
 import CodeBlockShiki from 'tiptap-extension-code-block-shiki'
 
@@ -24,8 +26,37 @@ const defaultOptions: Partial<EditorOptions> = {
         },
       },
     }),
+    TaskItem,
+    TaskList,
     CodeBlockShiki.configure({
       defaultTheme: 'dracula',
+    }).extend({
+      addKeyboardShortcuts() {
+        return {
+          Tab: () => {
+            const TAB_CHAR = '\u00A0\u00A0\u00A0\u00A0'
+
+            if (this.editor.isActive('codeBlock')) {
+              // TODO: implement selected code indentation
+              if (this.editor.state.selection.empty) {
+                this.editor
+                  .chain()
+                  .sinkListItem('listItem')
+                  .command(({ tr }) => {
+                    tr.insertText(TAB_CHAR)
+                    return true
+                  })
+                  .setTextSelection(
+                    this.editor.state.selection.from + TAB_CHAR.length,
+                  )
+                  .run()
+              }
+              return true
+            }
+            return false
+          },
+        }
+      },
     }),
     Placeholder.configure({
       placeholder: ({ node }) => {
