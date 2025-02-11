@@ -4,6 +4,8 @@ import Placeholder from '@tiptap/extension-placeholder'
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle'
 import Image from '@tiptap/extension-image'
 import { Markdown } from 'tiptap-markdown'
+import CodeBlockShiki from 'tiptap-extension-code-block-shiki'
+
 import Command from '../extensions/command'
 import suggestion from '../extensions/suggestion'
 import { defu } from 'defu'
@@ -15,6 +17,15 @@ const defaultOptions: Partial<EditorOptions> = {
       heading: {
         levels: [1, 2, 3],
       },
+      codeBlock: false,
+      horizontalRule: {
+        HTMLAttributes: {
+          'data-type': 'draggable',
+        },
+      },
+    }),
+    CodeBlockShiki.configure({
+      defaultTheme: 'dracula',
     }),
     Placeholder.configure({
       placeholder: ({ node }) => {
@@ -25,7 +36,9 @@ const defaultOptions: Partial<EditorOptions> = {
       },
       includeChildren: true,
     }),
-    GlobalDragHandle,
+    GlobalDragHandle.configure({
+      customNodes: ['draggable'],
+    }),
     Command.configure({
       suggestion,
     }),

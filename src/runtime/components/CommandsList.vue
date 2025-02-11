@@ -1,10 +1,21 @@
 <script setup lang="ts">
-import type { Editor } from '@tiptap/vue-3'
-import { ref, inject, type Ref } from 'vue'
+import type { Editor, Range } from '@tiptap/vue-3'
+import { ref, inject, type Ref, computed } from 'vue'
 
 const props = defineProps<{
   editor: Editor
-  items: any[]
+  items: {
+    title: string
+    command: ({
+      editor,
+      range,
+    }: {
+      editor: Editor
+      range: Range | null
+    }) => void
+    class?: string
+    icon?: string
+  }[]
 }>()
 
 const selectedIndex = ref(0)
@@ -48,15 +59,29 @@ function enterHandler(): void {
 }
 
 function selectItem(index: number): void {
-  const item = props.items[index]
+  const item = filteredItems.value[index]
   if (item && suggestionsState) {
     item.command({ editor: props.editor, range: suggestionsState.value.range })
   }
 }
+
+const filteredItems = computed(() => {
+  return props.items.filter(
+    (item) =>
+      !suggestionsState?.value.query.length ||
+      item.title
+        .toLowerCase()
+        .startsWith(suggestionsState?.value.query.toLowerCase()),
+  )
+})
 </script>
 
 <template>
   <div id="pencil-commands__list" @keydown="onKeyDown">
-    <slot :selectedIndex="selectedIndex" :selectItem="selectItem" />
+    <slot
+      :selectedIndex="selectedIndex"
+      :selectItem="selectItem"
+      :filteredItems="filteredItems"
+    />
   </div>
 </template>

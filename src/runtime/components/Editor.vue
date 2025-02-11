@@ -1,19 +1,30 @@
 <script setup lang="ts">
-import { EditorContent, BubbleMenu, Editor } from '@tiptap/vue-3'
+import { EditorContent, BubbleMenu, Editor, type Range } from '@tiptap/vue-3'
 import { useEditor } from '../composables/useEditor'
 import { ref, provide } from 'vue'
-import type Suggestion from '@tiptap/suggestion'
+import CommandsList from './CommandsList.vue'
 
 const props = defineProps<{
   editor?: Editor
-  commands: Partial<typeof Suggestion>[]
+  commands: {
+    title: string
+    command: ({
+      editor,
+      range,
+    }: {
+      editor: Editor
+      range: Range | null
+    }) => void
+    class?: string
+    icon?: string
+  }[]
 }>()
 
 const editor =
-  props.editor ??
+  props.editor! ??
   useEditor({
     content: '<h1>Hello World</h1>',
-  })
+  })!
 
 const showSuggestions = ref(false)
 
@@ -38,15 +49,17 @@ provide('suggestionsState', suggestionsState)
         <CommandsList
           :editor="editor"
           :items="commands"
-          v-slot="{ selectedIndex, selectItem }"
+          v-slot="{ selectedIndex, selectItem, filteredItems }"
         >
           <slot
             name="suggestions"
             :editor="editor"
-            :suggestions="commands"
+            :suggestions="filteredItems"
             :selectedIndex="selectedIndex"
             :selectItem="selectItem"
-          />
+          >
+            Use the #suggestions slot to add suggestions.
+          </slot>
         </CommandsList>
       </Teleport>
     </template>
