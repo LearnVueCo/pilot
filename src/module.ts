@@ -29,6 +29,11 @@ export default defineNuxtModule<ModuleOptions>({
       as: 'useEditor',
       from: resolver.resolve('./runtime/composables/useEditor'),
     })
+    addImports({
+      name: 'useTitle',
+      as: 'useTitle',
+      from: resolver.resolve('./runtime/composables/useTitle'),
+    })
     nuxt.options.css.push(
       resolver.resolve('./runtime/assets/styles/editor.css'),
     )

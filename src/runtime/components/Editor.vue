@@ -6,7 +6,7 @@ import CommandsList from './CommandsList.vue'
 
 const props = defineProps<{
   editor?: Editor
-  commands: {
+  commands?: {
     title: string
     command: ({
       editor,
@@ -18,6 +18,7 @@ const props = defineProps<{
     class?: string
     icon?: string
   }[]
+  disableBubbleMenu?: boolean
 }>()
 
 const editor =
@@ -48,7 +49,7 @@ provide('suggestionsState', suggestionsState)
       <Teleport to="#pencil-commands__root">
         <CommandsList
           :editor="editor"
-          :items="commands"
+          :items="commands ?? []"
           v-slot="{ selectedIndex, selectItem, filteredItems }"
         >
           <slot
@@ -64,9 +65,9 @@ provide('suggestionsState', suggestionsState)
       </Teleport>
     </template>
     <BubbleMenu
+      v-if="editor && !disableBubbleMenu"
       :editor="editor"
       :tippy-options="{ duration: 100 }"
-      v-if="editor"
     >
       <slot name="menu" :editor="editor">
         <div class="bubble-menu">
