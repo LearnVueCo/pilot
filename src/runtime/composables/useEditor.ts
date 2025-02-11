@@ -11,9 +11,23 @@ import CodeBlockShiki from 'tiptap-extension-code-block-shiki'
 import Command from '../extensions/command'
 import suggestion from '../extensions/suggestion'
 import { defu } from 'defu'
+import {
+  handleImagePaste,
+  handleImageDrop,
+  UploadImagesPlugin,
+  uploadFn,
+} from '../plugins/upload-image'
 
 const defaultOptions: Partial<EditorOptions> = {
   content: '<h1></h1>',
+  editorProps: {
+    handlePaste: (view, event) => {
+      return handleImagePaste(view, event, uploadFn)
+    },
+    handleDrop(view, event, slice, moved) {
+      return handleImageDrop(view, event, moved, uploadFn)
+    },
+  },
   extensions: [
     StarterKit.configure({
       heading: {
@@ -76,6 +90,14 @@ const defaultOptions: Partial<EditorOptions> = {
     Image.configure({
       inline: true,
       allowBase64: true,
+    }).extend({
+      addProseMirrorPlugins() {
+        return [
+          UploadImagesPlugin({
+            imageClass: 'opacity-30',
+          }),
+        ]
+      },
     }),
     Markdown.configure({
       html: true, // Allow HTML input/output
