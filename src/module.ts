@@ -21,6 +21,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
     addPlugin(resolver.resolve('./runtime/plugin'))
+
     addComponentsDir({
       path: resolver.resolve('./runtime/components'),
     })
@@ -29,6 +30,29 @@ export default defineNuxtModule<ModuleOptions>({
       as: 'useEditor',
       from: resolver.resolve('./runtime/composables/useEditor'),
     })
+    addImports([
+      {
+        name: 'findPlaceholder',
+        as: 'findPlaceholder',
+        from: resolver.resolve('./runtime/plugins/upload-image'),
+      },
+      {
+        name: 'createImageUpload',
+        as: 'createImageUpload',
+        from: resolver.resolve('./runtime/plugins/upload-image'),
+        declarationType: 'function',
+      },
+      {
+        name: 'handleImagePaste',
+        as: 'handleImagePaste',
+        from: resolver.resolve('./runtime/plugins/upload-image'),
+      },
+      {
+        name: 'handleImageDrop',
+        as: 'handleImageDrop',
+        from: resolver.resolve('./runtime/plugins/upload-image'),
+      },
+    ])
     addImports({
       name: 'useTitle',
       as: 'useTitle',

@@ -48,10 +48,8 @@ export const UploadImagesPlugin = ({ imageClass }: { imageClass: string }) =>
     },
   })
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
-function findPlaceholder(state: EditorState, id: {}) {
+export function findPlaceholder(state: EditorState, id: {}) {
   const decos = uploadKey.getState(state) as DecorationSet
-  // biome-ignore lint/suspicious/noDoubleEquals: <explanation>
   const found = decos.find(undefined, undefined, (spec) => spec.id == id)
   return found.length ? found[0]?.from : null
 }
@@ -61,9 +59,11 @@ export interface ImageUploadOptions {
   onUpload: (file: File) => Promise<unknown>
 }
 
-export const createImageUpload =
-  ({ validateFn, onUpload }: ImageUploadOptions): UploadFn =>
-  (file, view, pos) => {
+export function createImageUpload({
+  validateFn,
+  onUpload,
+}: ImageUploadOptions): UploadFn {
+  return async (file, view, pos) => {
     // check if the file is an image
     const validated = validateFn?.(file)
     if (!validated) return
@@ -87,40 +87,39 @@ export const createImageUpload =
       view.dispatch(tr)
     }
 
-    onUpload(file).then(
-      (src) => {
-        const { schema } = view.state
+    try {
+      const src = await onUpload(file)
 
-        const pos = findPlaceholder(view.state, id)
+      const { schema } = view.state
 
-        // If the content around the placeholder has been deleted, drop
-        // the image
-        if (pos == null) return
+      const currentPos = findPlaceholder(view.state, id)
 
-        // Otherwise, insert it at the placeholder's position, and remove
-        // the placeholder
+      // If the content around the placeholder has been deleted, drop
+      // the image
+      if (currentPos == null) return
 
-        // When BLOB_READ_WRITE_TOKEN is not valid or unavailable, read
-        // the image locally
-        const imageSrc = typeof src === 'object' ? reader.result : src
+      // Otherwise, insert it at the placeholder's position, and remove
+      // the placeholder
 
-        const node = schema.nodes.image?.create({ src: imageSrc })
-        if (!node) return
+      // When BLOB_READ_WRITE_TOKEN is not valid or unavailable, read
+      // the image locally
+      const imageSrc = typeof src === 'object' ? reader.result : src
 
-        const transaction = view.state.tr
-          .replaceWith(pos, pos, node)
-          .setMeta(uploadKey, { remove: { id } })
-        view.dispatch(transaction)
-      },
-      () => {
-        // Deletes the image placeholder on error
-        const transaction = view.state.tr
-          .delete(pos, pos)
-          .setMeta(uploadKey, { remove: { id } })
-        view.dispatch(transaction)
-      },
-    )
+      const node = schema.nodes.image?.create({ src: imageSrc })
+      if (!node) return
+
+      const transaction = view.state.tr
+        .replaceWith(currentPos, currentPos, node)
+        .setMeta(uploadKey, { remove: { id } })
+      view.dispatch(transaction)
+    } catch (error) {
+      const transaction = view.state.tr
+        .delete(pos, pos)
+        .setMeta(uploadKey, { remove: { id } })
+      view.dispatch(transaction)
+    }
   }
+}
 
 export type UploadFn = (file: File, view: EditorView, pos: number) => void
 
@@ -159,41 +158,3 @@ export const handleImageDrop = (
   }
   return false
 }
-
-const onUpload = (file: File) => {
-  // convert this to form data
-  const formData = new FormData()
-  formData.append('file', file)
-
-  const promise = $fetch('/api/upload', {
-    method: 'POST',
-    body: formData,
-  })
-
-  return new Promise((resolve, reject) => {
-    promise.then(async (blob: any) => {
-      const url = '/' + blob?.pathname
-      // preload the image
-      const image = new Image()
-      image.src = url
-      image.onload = () => {
-        resolve(url)
-      }
-    })
-  })
-}
-
-export const uploadFn = createImageUpload({
-  onUpload,
-  validateFn: (file) => {
-    if (!file.type.includes('image/')) {
-      console.error('File type not supported.')
-      return false
-    }
-    if (file.size / 1024 / 1024 > 20) {
-      console.error('File size too big (max 20MB).')
-      return false
-    }
-    return true
-  },
-})
