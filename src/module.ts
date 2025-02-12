@@ -52,6 +52,11 @@ export default defineNuxtModule<ModuleOptions>({
         as: 'handleImageDrop',
         from: resolver.resolve('./runtime/plugins/upload-image'),
       },
+      {
+        name: 'preloadImage',
+        as: 'preloadImage',
+        from: resolver.resolve('./runtime/plugins/upload-image'),
+      },
     ])
     addImports({
       name: 'useTitle',
