@@ -79,7 +79,7 @@ const filteredCommands = computed(() => {
 </script>
 
 <template>
-  <div>
+  <div v-if="editor">
     <slot name="header" :editor="editor" />
     <template v-if="showSuggestions">
       <Teleport to="#pencil-commands__root">
