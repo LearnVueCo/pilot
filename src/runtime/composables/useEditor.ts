@@ -94,7 +94,7 @@ const defaultOptions: Partial<EditorOptions> = {
       addProseMirrorPlugins() {
         return [
           UploadImagesPlugin({
-            imageClass: 'opacity-30',
+            imageClass: 'opacity-30 animate-pulse',
           }),
         ]
       },
