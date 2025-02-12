@@ -28,7 +28,6 @@ export default defineNuxtModule<ModuleOptions>({
         name: 'createImageUpload',
         as: 'createImageUpload',
         from: resolver.resolve('./runtime/plugins/upload-image'),
-        declarationType: 'function',
       },
       {
         name: 'handleImagePaste',

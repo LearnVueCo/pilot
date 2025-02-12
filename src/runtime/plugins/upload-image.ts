@@ -58,11 +58,9 @@ export interface ImageUploadOptions {
   onUpload: (file: File) => Promise<unknown>
 }
 
-export function createImageUpload({
-  validateFn,
-  onUpload,
-}: ImageUploadOptions): UploadFn {
-  return async (file, view, pos) => {
+export const createImageUpload =
+  ({ validateFn, onUpload }: ImageUploadOptions): UploadFn =>
+  async (file, view, pos) => {
     // check if the file is an image
     const validated = validateFn?.(file)
     if (!validated) return
@@ -118,7 +116,6 @@ export function createImageUpload({
       view.dispatch(transaction)
     }
   }
-}
 
 export type UploadFn = (file: File, view: EditorView, pos: number) => void
 

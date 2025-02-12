@@ -8,7 +8,6 @@ import {
   watch,
   onBeforeMount,
   onUnmounted,
-  defineProps,
   inject,
   type Ref,
   watchEffect,
