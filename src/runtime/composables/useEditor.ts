@@ -1,4 +1,10 @@
-import { useEditor as createEditor, type EditorOptions } from '@tiptap/vue-3'
+import {
+  useEditor as createEditor,
+  type EditorOptions,
+  type NodeViewProps,
+  VueNodeViewRenderer,
+  VueRenderer,
+} from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle'
@@ -11,6 +17,8 @@ import Command from '../extensions/command'
 import suggestion from '../extensions/suggestion'
 import { defu } from 'defu'
 import { UploadImagesPlugin } from '../plugins/upload-image'
+import ListItem from '../components/pm/ListItem.vue'
+import type { Component } from 'vue'
 
 const defaultOptions: Partial<EditorOptions> = {
   content: '<h1></h1>',
@@ -26,7 +34,11 @@ const defaultOptions: Partial<EditorOptions> = {
         },
       },
     }),
-    TaskItem,
+    TaskItem.extend({
+      addNodeView() {
+        return VueNodeViewRenderer(ListItem as Component<NodeViewProps>)
+      },
+    }),
     TaskList,
     CodeBlockShiki.configure({
       defaultTheme: 'dracula',
