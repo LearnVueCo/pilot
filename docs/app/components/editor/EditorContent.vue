@@ -100,7 +100,7 @@ const suggestions: {
 </script>
 
 <template>
-  <div class="mx-auto max-w-3xl rounded border border-[var(--ui-border)] p-8">
+  <div class="rounded border border-[var(--ui-border)] p-8">
     <ClientOnly>
       <Editor :editor="editor" :commands="suggestions">
         <template #suggestions="{ suggestions, selectedIndex, selectItem }">

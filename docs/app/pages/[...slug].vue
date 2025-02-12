@@ -8,6 +8,5 @@ const { data: page } = await useAsyncData(route.path, () => {
 <template>
   <div class="container mx-auto">
     <ContentRenderer v-if="page" :value="page" />
-    <EditorContent />
   </div>
 </template>
