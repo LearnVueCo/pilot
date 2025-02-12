@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { EditorContent, BubbleMenu, Editor, type Range } from '@tiptap/vue-3'
 import { useEditor } from '../composables/useEditor'
-import { ref, provide } from 'vue'
+import { ref, provide, computed } from 'vue'
 import CommandsList from './CommandsList.vue'
 import type { EditorState } from '@tiptap/pm/state'
 
@@ -18,6 +18,7 @@ const props = defineProps<{
     }) => void
     class?: string
     icon?: string
+    filter?: ({ editor }: { editor: Editor }) => boolean
   }[]
   disableBubbleMenu?: boolean
 }>()
@@ -58,6 +59,15 @@ function shouldShow(props: { state: EditorState }) {
   }
   return true
 }
+
+const filteredCommands = computed(() => {
+  if (!props.editor) {
+    return props.commands
+  }
+  return props.commands?.filter(
+    (c) => c.filter?.({ editor: props.editor! }) ?? true,
+  )
+})
 </script>
 
 <template>
@@ -67,7 +77,7 @@ function shouldShow(props: { state: EditorState }) {
       <Teleport to="#pencil-commands__root">
         <CommandsList
           :editor="editor"
-          :items="commands ?? []"
+          :items="filteredCommands ?? []"
           v-slot="{ selectedIndex, selectItem, filteredItems }"
         >
           <slot
