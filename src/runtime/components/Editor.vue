@@ -53,9 +53,17 @@ function shouldShow(props: { state: EditorState }) {
   const from = props.state.selection.from
   const pos = props.state.doc.resolve(from)
   const node = pos.node()
+  const ignoreList = ['codeblock', 'image'] // TODO: Make convert this into a bubble menu computed property based on editor
 
-  if (node.type.name.toLowerCase() === 'codeblock') {
+  if (ignoreList.includes(node.type.name.toLowerCase())) {
     return false
+  }
+
+  for (let i = 0; i < node.childCount; i++) {
+    const child = node.child(i)
+    if (ignoreList.includes(child.type.name.toLowerCase())) {
+      return false
+    }
   }
   return true
 }
