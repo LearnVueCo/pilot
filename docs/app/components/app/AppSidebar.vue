@@ -10,7 +10,7 @@ function formatNav(items: ContentNavigationItem[]): NavigationMenuItem[] {
   return items.map((item) => ({
     label: item.title,
     to: item.path,
-    icon: item.icon as string,
+    icon: typeof item.icon === 'string' ? item.icon : undefined,
     children: item.children ? formatNav(item.children) : undefined,
     defaultOpen: !!item.children?.length,
   }))
