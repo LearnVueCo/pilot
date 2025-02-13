@@ -76,10 +76,17 @@ const filteredCommands = computed(() => {
     (c) => c.filter?.({ editor: props.editor! }) ?? true,
   )
 })
+
+function hideDragHandle() {
+  const dragHandle = document.querySelector('.drag-handle')
+  if (dragHandle) {
+    dragHandle.classList.add('hide')
+  }
+}
 </script>
 
 <template>
-  <div v-if="editor">
+  <div v-if="editor" @mouseleave="hideDragHandle">
     <slot name="header" :editor="editor" />
     <template v-if="showSuggestions">
       <Teleport to="#pencil-commands__root">
