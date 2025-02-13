@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { NodeViewConstructor } from '@tiptap/pm/view'
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/vue-3'
 import { computed } from 'vue'
 
 const { node, updateAttributes } = defineProps<{
-  node: any
+  node: Parameters<NodeViewConstructor>[0]
   updateAttributes: (args: any) => void
 }>()
 
