@@ -111,7 +111,6 @@ const defaultOptions: Partial<EditorOptions> = {
 }
 
 export function useEditor(config: Partial<EditorOptions> = {}) {
-  console.log('here')
   const options = defu(config, defaultOptions)
   return createEditor(options)
 }
