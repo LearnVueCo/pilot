@@ -7,6 +7,7 @@ const { data: navTree } = await useAsyncData('navigation', () => {
 })
 
 function formatNav(items: ContentNavigationItem[]): NavigationMenuItem[] {
+  if (!items?.length) return []
   return items.map((item) => ({
     label: item.title,
     to: item.path,
