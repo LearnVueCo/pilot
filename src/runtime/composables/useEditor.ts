@@ -1,5 +1,6 @@
 import {
   useEditor as createEditor,
+  type Range,
   type EditorOptions,
   type NodeViewProps,
   VueNodeViewRenderer,
@@ -47,23 +48,84 @@ const defaultOptions: Partial<EditorOptions> = {
         return {
           Tab: () => {
             const TAB_CHAR = '\u00A0\u00A0\u00A0\u00A0'
-
             if (this.editor.isActive('codeBlock')) {
-              // TODO: implement selected code indentation
-              if (this.editor.state.selection.empty) {
-                this.editor
+              const { empty, from, to } = this.editor.state.selection
+              if (empty) {
+                return this.editor
                   .chain()
-                  .sinkListItem('listItem')
                   .command(({ tr }) => {
                     tr.insertText(TAB_CHAR)
                     return true
                   })
-                  .setTextSelection(
-                    this.editor.state.selection.from + TAB_CHAR.length,
-                  )
                   .run()
               }
-              return true
+              // Handle selected text indentation
+              const lines = this.editor.state.doc
+                .textBetween(from, to)
+                .split('\n')
+
+              return this.editor
+                .chain()
+                .deleteRange({ from, to })
+                .command(({ tr }) => {
+                  for (let i = 0; i < lines.length; i++) {
+                    tr.insertText(TAB_CHAR)
+                    tr.insertText(lines[i])
+                    if (i < lines.length - 1) {
+                      tr.insertText('\n')
+                    }
+                  }
+                  return true
+                })
+                .setTextSelection({
+                  from: from,
+                  to: to + TAB_CHAR.length * lines.length,
+                })
+                .run()
+            }
+            return true
+          },
+          'Shift-Tab': () => {
+            if (this.editor.isActive('codeBlock')) {
+              const { empty, from, to } = this.editor.state.selection
+              const TAB_CHAR = '\u00A0\u00A0\u00A0\u00A0'
+
+              if (empty) {
+                const pos = from - TAB_CHAR.length
+                const textBefore = this.editor.state.doc.textBetween(pos, from)
+                if (textBefore === TAB_CHAR) {
+                  return this.editor
+                    .chain()
+                    .deleteRange({ from: pos, to: from })
+                    .run()
+                }
+                return false
+              }
+
+              // Handle selected text outdentation
+              const lines = this.editor.state.doc
+                .textBetween(from, to)
+                .split('\n')
+              const outdentedText = lines.map((line) =>
+                line.startsWith(TAB_CHAR) ? line.slice(TAB_CHAR.length) : line,
+              )
+              return this.editor
+                .chain()
+                .deleteRange({ from, to })
+                .command(({ tr }) => {
+                  for (let i = 0; i < outdentedText.length; i++) {
+                    tr.insertText(outdentedText[i])
+                    if (i < outdentedText.length - 1) {
+                      tr.insertText('\n')
+                    }
+                  }
+                  return true
+                })
+                .setTextSelection({
+                  from: from,
+                  to: to - TAB_CHAR.length * lines.length,
+                })
+                .run()
             }
             return false
           },
