@@ -47,7 +47,10 @@ export const UploadImagesPlugin = ({ imageClass }: { imageClass: string }) =>
     },
   })
 
-export function findPlaceholder(state: EditorState, id: {}) {
+export function findPlaceholder(
+  state: EditorState,
+  id: Record<string, unknown>,
+) {
   const decos = uploadKey.getState(state) as DecorationSet
   const found = decos.find(undefined, undefined, (spec) => spec.id == id)
   return found.length ? found[0]?.from : null
