@@ -16,7 +16,12 @@ const checked = computed({
 
 <template>
   <NodeViewWrapper as="li">
-    <UCheckbox v-model="checked" class="mt-0.5" color="primary" />
+    <UCheckbox
+      v-model="checked"
+      class="mt-0.5"
+      color="primary"
+      aria-label="Toggle list item completion"
+    />
     <NodeViewContent />
   </NodeViewWrapper>
 </template>
