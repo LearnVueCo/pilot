@@ -102,7 +102,11 @@ const suggestions: {
 <template>
   <div class="rounded border border-[var(--ui-border)] p-8">
     <ClientOnly>
-      <Editor :editor="editor" :commands="suggestions">
+      <Editor
+        :editor="editor"
+        :commands="suggestions"
+        aria-label="Rich text editor"
+      >
         <template #suggestions="{ suggestions, selectedIndex, selectItem }">
           <UButtonGroup
             orientation="vertical"
