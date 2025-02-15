@@ -5,7 +5,9 @@ import {
   type NodeViewProps,
   VueNodeViewRenderer,
   VueRenderer,
+  Extension,
 } from '@tiptap/vue-3'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle'
@@ -14,6 +16,7 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import { Markdown } from 'tiptap-markdown'
 import CodeBlockShiki from 'tiptap-extension-code-block-shiki'
+import Link from '@tiptap/extension-link'
 import Command from '../extensions/command'
 import suggestion from '../extensions/suggestion'
 import { defu } from 'defu'
@@ -35,7 +38,51 @@ const defaultOptions: Partial<EditorOptions> = {
         },
       },
     }),
-    TaskItem.extend({
+    Link.configure().extend({
+      addProseMirrorPlugins() {
+        return [
+          new Plugin({
+            key: new PluginKey('linkClickHandler'),
+            props: {
+              handleClick: (view, _pos, event) => {
+                // Special-handling only for Cmd+Click or mouse-wheel clicks, otherwise let TipTap handle it
+                const qualifiedClick =
+                  event.button === 1 ||
+                  (event.button === 0 && (event.metaKey || event.ctrlKey))
+
+                if (!view.editable || !qualifiedClick) {
+                  return false
+                }
+
+                let target = event.target as HTMLElement
+                while (
+                  target !== null &&
+                  target.nodeName !== 'A' &&
+                  target.nodeName !== 'DIV'
+                ) {
+                  target = target.parentNode as HTMLElement
+                }
+
+                if (target?.nodeName !== 'A') {
+                  return false
+                }
+
+                const href = target.getAttribute('href')
+                if (href === null) {
+                  return false
+                }
+
+                window.open(href, '_blank', 'noopener noreferrer')
+                return true
+              },
+            },
+          }),
+        ]
+      },
+    }),
+    TaskItem.configure({
+      nested: true,
+    }).extend({
       addNodeView() {
         return VueNodeViewRenderer(ListItem as Component<NodeViewProps>)
       },
@@ -83,7 +130,7 @@ const defaultOptions: Partial<EditorOptions> = {
                 })
                 .run()
             }
-            return true
+            return false
           },
           'Shift-Tab': () => {
             if (this.editor.isActive('codeBlock')) {
@@ -172,7 +219,77 @@ const defaultOptions: Partial<EditorOptions> = {
   ],
 }
 
-export function useEditor(config: Partial<EditorOptions> = {}) {
+function linkHoverPlugin(
+  onMouseOver: (
+    el: HTMLElement,
+    range: { start?: number; end?: number },
+  ) => void,
+  onMouseLeave: (el: HTMLElement) => void,
+) {
+  return Extension.create({
+    name: 'handleLinkHover',
+    addProseMirrorPlugins() {
+      return [
+        new Plugin({
+          key: new PluginKey('hover'),
+          props: {
+            handleDOMEvents: {
+              mouseover(view, event) {
+                const el = event.target as HTMLElement
+                if (el.tagName !== 'A') {
+                  return
+                }
+                el.setAttribute('data-hovered', 'true')
+
+                onMouseOver(el, {
+                  start: el.pmViewDesc?.posAtStart,
+                  end: el.pmViewDesc?.posAtEnd,
+                })
+              },
+              mouseout(view, event) {
+                if ((event.target as HTMLElement).tagName !== 'A') {
+                  return
+                }
+                onMouseLeave(event.target as HTMLElement)
+              },
+            },
+          },
+        }),
+      ]
+    },
+  })
+}
+
+type CustomOptions = {
+  onMouseOver: (
+    el: HTMLElement,
+    range: { start?: number; end?: number },
+  ) => void
+  onMouseLeave: (el: HTMLElement) => void
+}
+export function useEditor(config: Partial<EditorOptions & CustomOptions> = {}) {
   const options = defu(config, defaultOptions)
+  options.extensions?.push(
+    linkHoverPlugin(
+      (el) => {
+        if (config.onMouseOver) {
+          config.onMouseOver(el, {
+            start: el.pmViewDesc?.posAtStart,
+            end: el.pmViewDesc?.posAtEnd,
+          })
+        }
+      },
+      (el) => {
+        if (config.onMouseLeave) {
+          config.onMouseLeave(el)
+        }
+      },
+    ),
+  )
+
   return createEditor(options)
 }
+/*
+
+
+*/

@@ -54,6 +54,11 @@ export default defineNuxtModule<ModuleOptions>({
         as: 'useEditor',
         from: resolver.resolve('./runtime/composables/useEditor'),
       },
+      {
+        name: 'useTooltip',
+        as: 'useTooltip',
+        from: resolver.resolve('./runtime/composables/useTooltip'),
+      },
     ])
   },
 })
