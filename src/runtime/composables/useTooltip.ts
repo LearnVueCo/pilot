@@ -1,8 +1,13 @@
-import { useFloating, flip, offset } from '@floating-ui/vue'
+import {
+  useFloating,
+  flip,
+  offset,
+  type VirtualElement,
+} from '@floating-ui/vue'
 import type { Ref } from 'vue'
 
 export function useTooltip(
-  reference: Ref<HTMLElement | null>,
+  reference: Ref<HTMLElement | VirtualElement | null>,
   tooltip: Ref<HTMLElement | null>,
 ) {
   const { floatingStyles } = useFloating(reference, tooltip, {

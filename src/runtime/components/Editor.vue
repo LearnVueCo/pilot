@@ -1,39 +1,22 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends EditorCommand">
+import type { EditorCommand } from '../utils/editor/commands'
 import { EditorContent, BubbleMenu, Editor, type Range } from '@tiptap/vue-3'
-import { useEditor } from '../composables/useEditor'
 import { ref, provide, computed } from 'vue'
 import CommandsList from './CommandsList.vue'
 import type { EditorState } from '@tiptap/pm/state'
 
 const props = defineProps<{
   editor?: Editor
-  commands?: {
-    title: string
-    command: ({
-      editor,
-      range,
-    }: {
-      editor: Editor
-      range: Range | null
-    }) => void
-    class?: string
-    icon?: string
-    filter?: ({ editor }: { editor: Editor }) => boolean
-  }[]
+  commands?: T[]
   disableBubbleMenu?: boolean
 }>()
 
-const editor =
-  props.editor! ??
-  useEditor({
-    content: '<h1>Hello World</h1>',
-  })!
+const editor = props.editor
+const showCommands = ref(false)
 
-const showSuggestions = ref(false)
+provide('showCommands', showCommands)
 
-provide('showSuggestions', showSuggestions)
-
-const suggestionsState = ref<{
+const commandsState = ref<{
   range: Range | null
   query: string
 }>({
@@ -41,7 +24,7 @@ const suggestionsState = ref<{
   query: '',
 })
 
-provide('suggestionsState', suggestionsState)
+provide('commandsState', commandsState)
 
 function shouldShow(props: { state: EditorState }) {
   if (!props.state?.selection) {
@@ -53,7 +36,7 @@ function shouldShow(props: { state: EditorState }) {
   const from = props.state.selection.from
   const pos = props.state.doc.resolve(from)
   const node = pos.node()
-  const ignoreList = ['codeblock', 'image'] // TODO: Make convert this into a bubble menu computed property based on editor
+  const ignoreList = ['codeblock'] // TODO: Make convert this into a bubble menu computed property based on editor
 
   if (ignoreList.includes(node.type.name.toLowerCase())) {
     return false
@@ -88,7 +71,7 @@ function hideDragHandle() {
 <template>
   <div v-if="editor" @mouseleave="hideDragHandle">
     <slot name="header" :editor="editor" />
-    <template v-if="showSuggestions">
+    <template v-if="showCommands">
       <Teleport to="#pencil-commands__root">
         <CommandsList
           :editor="editor"
@@ -96,19 +79,19 @@ function hideDragHandle() {
           v-slot="{ selectedIndex, selectItem, filteredItems }"
         >
           <slot
-            name="suggestions"
+            name="commands"
             :editor="editor"
-            :suggestions="filteredItems"
+            :commands="filteredItems"
             :selectedIndex="selectedIndex"
             :selectItem="selectItem"
           >
-            Use the #suggestions slot to add suggestions.
+            Use the #commands slot to add commands UI
           </slot>
         </CommandsList>
       </Teleport>
     </template>
     <BubbleMenu
-      v-if="editor && !disableBubbleMenu"
+      v-if="!disableBubbleMenu"
       :editor="editor"
       :tippy-options="{ duration: 100 }"
       :shouldShow="({ state }) => shouldShow({ state })"

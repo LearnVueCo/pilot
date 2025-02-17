@@ -14,13 +14,13 @@ import {
 } from 'vue'
 import type { Range } from '@tiptap/vue-3'
 
-const showSuggestions = inject<Ref<boolean>>('showSuggestions')
-const suggestionState = inject<
+const showCommands = inject<Ref<boolean>>('showCommands')
+const commandsState = inject<
   Ref<{
     range: Range | null
     query: string
   }>
->('suggestionsState')
+>('commandsState')
 
 const props = defineProps<{
   range: Range
@@ -28,22 +28,22 @@ const props = defineProps<{
 }>()
 
 onBeforeMount(() => {
-  if (showSuggestions) {
-    showSuggestions.value = true
+  if (showCommands) {
+    showCommands.value = true
   }
 })
 
 onUnmounted(() => {
-  if (showSuggestions) {
-    showSuggestions.value = false
+  if (showCommands) {
+    showCommands.value = false
   }
 })
 
 watchEffect(() => {
-  if (!suggestionState) {
+  if (!commandsState) {
     return
   }
-  suggestionState.value = {
+  commandsState.value = {
     range: props.range,
     query: props.query,
   }

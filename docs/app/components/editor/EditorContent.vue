@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { type Editor, type Range } from '@tiptap/vue-3'
-const editor = useEditor({
-  content: '<h1></h1>',
+const { editor } = useEditor({
+  editor: {
+    content: '<h1></h1>',
+  },
 })
 
-const suggestions: {
+const commands: {
   title: string
   command: ({ editor, range }: { editor: Editor; range: Range | null }) => void
   class?: string
@@ -104,16 +106,16 @@ const suggestions: {
     <ClientOnly>
       <Editor
         :editor="editor"
-        :commands="suggestions"
+        :commands="commands"
         aria-label="Rich text editor"
       >
-        <template #suggestions="{ suggestions, selectedIndex, selectItem }">
+        <template #commands="{ commands, selectedIndex, selectItem }">
           <UButtonGroup
             orientation="vertical"
             class="rounded-lg border border-[var(--ui-border)] bg-[var(--ui-bg-accented)]"
           >
             <UButton
-              v-for="(item, index) in suggestions"
+              v-for="(item, index) in commands"
               :key="index"
               variant="ghost"
               color="neutral"

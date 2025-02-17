@@ -1,30 +1,20 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends EditorCommand">
 import type { Editor, Range } from '@tiptap/vue-3'
-import { ref, inject, type Ref, computed } from 'vue'
+import { ref, inject, type Ref, computed, watch } from 'vue'
+import type { EditorCommand } from '../utils/editor/commands'
 
 const props = defineProps<{
   editor: Editor
-  items: {
-    title: string
-    command: ({
-      editor,
-      range,
-    }: {
-      editor: Editor
-      range: Range | null
-    }) => void
-    class?: string
-    icon?: string
-  }[]
+  items: T[]
 }>()
 
 const selectedIndex = ref(0)
-const suggestionsState = inject<
+const commandsState = inject<
   Ref<{
     range: Range | null
     query: string
   }>
->('suggestionsState')
+>('commandsState')
 
 function onKeyDown(event: KeyboardEvent): boolean {
   if (event.key === 'ArrowUp') {
@@ -60,19 +50,31 @@ function enterHandler(): void {
 
 function selectItem(index: number): void {
   const item = filteredItems.value[index]
-  if (item && suggestionsState) {
-    item.command({ editor: props.editor, range: suggestionsState.value.range })
+  if (item && commandsState) {
+    if (!commandsState.value.range) {
+      return
+    }
+    item.command({ editor: props.editor, range: commandsState.value.range })
   }
 }
 
 const filteredItems = computed(() => {
   return props.items.filter(
     (item) =>
-      !suggestionsState?.value.query.length ||
-      item.title
+      !commandsState?.value.query.length ||
+      item.label
         .toLowerCase()
-        .startsWith(suggestionsState?.value.query.toLowerCase()),
+        .startsWith(commandsState?.value.query.toLowerCase()) ||
+      item.altNames?.some((altName) =>
+        altName
+          .toLowerCase()
+          .startsWith(commandsState?.value.query.toLowerCase()),
+      ),
   )
+})
+
+watch(filteredItems, () => {
+  selectedIndex.value = 0
 })
 </script>
 

@@ -4,7 +4,11 @@ import { Decoration, DecorationSet, type EditorView } from '@tiptap/pm/view'
 
 const uploadKey = new PluginKey('upload-image')
 
-export const UploadImagesPlugin = ({ imageClass }: { imageClass: string }) =>
+export const UploadImagesPlugin = ({
+  loadingClass,
+}: {
+  loadingClass: string
+}) =>
   new Plugin({
     key: uploadKey,
     state: {
@@ -20,7 +24,7 @@ export const UploadImagesPlugin = ({ imageClass }: { imageClass: string }) =>
           const placeholder = document.createElement('div')
           placeholder.setAttribute('class', 'img-placeholder')
           const image = document.createElement('img')
-          image.setAttribute('class', imageClass)
+          image.setAttribute('class', loadingClass)
           image.src = src
           placeholder.appendChild(image)
           const deco = Decoration.widget(pos + 1, placeholder, {
@@ -65,6 +69,7 @@ export const createImageUpload =
   async (file, view, pos) => {
     // check if the file is an image
     const validated = validateFn?.(file)
+
     if (!validated) return
     // A fresh object to act as the ID for this upload
     const id = {}
