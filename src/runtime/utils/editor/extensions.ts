@@ -16,6 +16,7 @@ import {
   Placeholder,
   type PlaceholderOptions,
 } from '@tiptap/extension-placeholder'
+import TextStyle from '@tiptap/extension-text-style'
 
 // Custom Plugins
 import { UploadImagesPlugin, type UploadFn } from '../../plugins/upload-image'
@@ -47,6 +48,9 @@ export const StarterKitExtension = (
       HTMLAttributes: {
         'data-type': 'draggable',
       },
+    },
+    dropcursor: {
+      color: '#ff00ff',
     },
   }
 
@@ -449,6 +453,89 @@ export const TextAlignExtension = (options: TextAlignExtensionOptions = {}) => {
   return TextAlign.configure(mergedOptions).extend({
     addKeyboardShortcuts() {
       return {}
+    },
+  })
+}
+
+export const TextStyleExtension = () => {
+  return TextStyle
+}
+
+export type ColorOptions = {
+  /**
+   * The types where the color can be applied
+   * @default ['textStyle']
+   * @example ['heading', 'paragraph']
+   */
+  types: string[]
+}
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    customClass: {
+      /**
+       * Set the text color
+       * @param color The color to set
+       * @example editor.commands.setColor('red')
+       */
+      add: (customClass: string) => ReturnType
+
+      /**
+       * Unset the text color
+       * @example editor.commands.unsetColor()
+       */
+      clear: () => ReturnType
+    }
+  }
+}
+
+export const SelectedTextExtension = () => {
+  return Extension.create<ColorOptions>({
+    name: 'selectedText',
+    addOptions() {
+      return {
+        types: ['textStyle'],
+      }
+    },
+
+    addGlobalAttributes() {
+      return [
+        {
+          types: this.options.types,
+          attributes: {
+            customClass: {
+              default: null,
+              parseHTML: (element) => '',
+              renderHTML: (attributes) => {
+                if (!attributes.customClass) {
+                  return {}
+                }
+
+                return {
+                  class: attributes.customClass,
+                }
+              },
+            },
+          },
+        },
+      ]
+    },
+    addCommands() {
+      return {
+        add:
+          (customClass) =>
+          ({ chain }) => {
+            return chain().setMark('textStyle', { customClass }).run()
+          },
+        clear:
+          () =>
+          ({ chain }) => {
+            return chain()
+              .setMark('textStyle', { customClass: null })
+              .removeEmptyTextStyle()
+              .run()
+          },
+      }
     },
   })
 }
