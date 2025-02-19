@@ -59,6 +59,16 @@ export default defineNuxtModule<ModuleOptions>({
         as: 'useTooltip',
         from: resolver.resolve('./runtime/composables/useTooltip'),
       },
+      {
+        name: 'useLinkHover',
+        as: 'useLinkHover',
+        from: resolver.resolve('./runtime/composables/useLinkHover'),
+      },
+      {
+        name: 'useLinkEdit',
+        as: 'useLinkEdit',
+        from: resolver.resolve('./runtime/composables/useLinkEdit'),
+      },
     ])
   },
 })

@@ -15,8 +15,6 @@ import {
   DragHandleExtension,
   MarkdownExtension,
   TextAlignExtension,
-  TextStyleExtension,
-  SelectedTextExtension,
 } from '../utils/editor/extensions'
 import type {
   CodeBlockExtensionOptions,
@@ -153,8 +151,6 @@ export function useEditor(config: Partial<Configuration> = {}) {
       Command.configure({
         suggestion,
       }),
-      TextStyleExtension(),
-      SelectedTextExtension(),
       ...createOptionalExtension(!!config.extensions?.LinkHoverExtension, () =>
         LinkHoverExtension({
           onMouseOver: config.extensions?.LinkHoverExtension?.onMouseOver,
