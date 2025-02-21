@@ -1,0 +1,42 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: #242424;
+  background-color: #bdc3c7;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.tiptap {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  outline: none;
+  min-height: 100vh;
+  background: #ffffff;
+  border-radius: 1.25rem 1.25rem 0 0;
+  padding: 1.25rem 4rem;
+  height: 100%;
+  width: 100%;
+}
+
+
+
+.tiptap .is-empty::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.opacity-30 {
+  opacity: 0.3;
+}

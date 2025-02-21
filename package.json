@@ -1,5 +1,5 @@
 {
-  "name": "@lv-tools/pencil",
+  "name": "@learnvue/pencil",
   "version": "1.0.0",
   "description": "My new Nuxt module",
   "repository": "your-org/my-module",
@@ -7,27 +7,30 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/types.d.ts",
+      "types": "./dist/vite.d.ts",
+      "import": "./dist/vite.mjs",
+      "require": "./dist/vite.cjs"
+    },
+    "./nuxt": {
+      "types": "./dist/module.d.ts",
       "import": "./dist/module.mjs",
       "require": "./dist/module.cjs"
+    },
+    "./extensions": {
+      "types": "./dist/extensions/index.d.ts",
+      "import": "./dist/extensions/index.mjs",
+      "require": "./dist/extensions/index.cjs"
     }
   },
-  "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
+  "main": "./dist/vite.cjs",
+  "types": "./dist/vite.d.ts",
   "files": [
     "dist"
   ],
+  "sideEffects": false,
   "scripts": {
-    "prepack": "nuxt-module-build build",
-    "dev": "nuxi dev playground",
-    "dev:build": "nuxi build playground",
-    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
-    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
-    "postinstall": "nuxt-module-build build --stub && nuxt-module-build prepare",
-    "lint": "eslint .",
-    "test": "vitest run",
-    "test:watch": "vitest watch",
-    "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
+    "build": "unbuild",
+    "prepack": "pnpm run build"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.6",
@@ -62,6 +65,7 @@
     "eslint": "^9.19.0",
     "nuxt": "^3.15.4",
     "typescript": "~5.7.3",
+    "unbuild": "^3.3.1",
     "vitest": "^3.0.5",
     "vue-tsc": "^2.2.0"
   }

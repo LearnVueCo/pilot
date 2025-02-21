@@ -20,54 +20,34 @@ export default defineNuxtModule<ModuleOptions>({
     const resolver = createResolver(import.meta.url)
 
     addComponentsDir({
-      path: resolver.resolve('./runtime/components'),
+      path: resolver.resolve('./components'),
     })
 
     addImports([
       {
-        name: 'createImageUpload',
-        as: 'createImageUpload',
-        from: resolver.resolve('./runtime/plugins/upload-image'),
-      },
-      {
-        name: 'handleImagePaste',
-        as: 'handleImagePaste',
-        from: resolver.resolve('./runtime/plugins/upload-image'),
-      },
-      {
-        name: 'handleImageDrop',
-        as: 'handleImageDrop',
-        from: resolver.resolve('./runtime/plugins/upload-image'),
-      },
-      {
-        name: 'preloadImage',
-        as: 'preloadImage',
-        from: resolver.resolve('./runtime/plugins/upload-image'),
-      },
-      {
         name: 'useTitle',
         as: 'useTitle',
-        from: resolver.resolve('./runtime/composables/useTitle'),
+        from: resolver.resolve('./composables/useTitle'),
       },
       {
         name: 'useEditor',
         as: 'useEditor',
-        from: resolver.resolve('./runtime/composables/useEditor'),
+        from: resolver.resolve('./composables/useEditor'),
       },
       {
         name: 'useTooltip',
         as: 'useTooltip',
-        from: resolver.resolve('./runtime/composables/useTooltip'),
+        from: resolver.resolve('./composables/useTooltip'),
       },
       {
         name: 'useLinkHover',
         as: 'useLinkHover',
-        from: resolver.resolve('./runtime/composables/useLinkHover'),
+        from: resolver.resolve('./composables/useLinkHover'),
       },
       {
         name: 'useLinkEdit',
         as: 'useLinkEdit',
-        from: resolver.resolve('./runtime/composables/useLinkEdit'),
+        from: resolver.resolve('./composables/useLinkEdit'),
       },
     ])
   },

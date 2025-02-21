@@ -6,11 +6,10 @@
     "build": "nuxt build",
     "dev": "nuxt dev --port 4000",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "preview": "nuxt preview"
   },
   "dependencies": {
-    "@lv-tools/pencil": "latest",
+    "@learnvue/pencil": "latest",
     "@nuxt/content": "3.1.1",
     "@nuxt/ui": "3.0.0-alpha.12",
     "nuxt": "^3.15.4",
