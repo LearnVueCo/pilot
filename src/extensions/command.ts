@@ -11,7 +11,8 @@ import tippy, {
   type Props,
 } from 'tippy.js'
 
-import CommandsRoot from '../components/CommandsRoot.vue'
+// temporary disabled because it's trying to get transpiled...i think this should get reworked to use a component first approach.
+// import CommandsRoot from '../components/CommandsRoot.vue'
 
 const suggestion = {
   render: () => {
@@ -20,24 +21,22 @@ const suggestion = {
 
     return {
       onStart: (props: SuggestionProps) => {
-        component = new VueRenderer(CommandsRoot, {
-          props,
-          editor: props.editor,
-        })
-
-        if (!props.clientRect) {
-          return
-        }
-
-        popup = tippy('body', {
-          getReferenceClientRect: props.clientRect as GetReferenceClientRect,
-          appendTo: () => document.body,
-          content: component.element!,
-          showOnCreate: true,
-          interactive: true,
-          trigger: 'manual',
-          placement: 'bottom-start',
-        })
+        // component = new VueRenderer(CommandsRoot, {
+        //   props,
+        //   editor: props.editor,
+        // })
+        // if (!props.clientRect) {
+        //   return
+        // }
+        // popup = tippy('body', {
+        //   getReferenceClientRect: props.clientRect as GetReferenceClientRect,
+        //   appendTo: () => document.body,
+        //   content: component.element!,
+        //   showOnCreate: true,
+        //   interactive: true,
+        //   trigger: 'manual',
+        //   placement: 'bottom-start',
+        // })
       },
 
       onUpdate(props: SuggestionProps) {
