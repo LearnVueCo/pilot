@@ -1,69 +1,72 @@
 import { Extension } from '@tiptap/core'
 import Suggestion from '@tiptap/suggestion'
-import { VueRenderer } from '@tiptap/vue-3'
 import {
   type SuggestionKeyDownProps,
   type SuggestionProps,
 } from '@tiptap/suggestion'
-import tippy, {
-  type GetReferenceClientRect,
-  type Instance,
-  type Props,
-} from 'tippy.js'
-
-// temporary disabled because it's trying to get transpiled...i think this should get reworked to use a component first approach.
-// import CommandsRoot from '../components/CommandsRoot.vue'
 
 const suggestion = {
   render: () => {
-    let component: VueRenderer
-    let popup: Instance<Props>[]
+    let commandProps: SuggestionProps | null = null
 
     return {
       onStart: (props: SuggestionProps) => {
-        // component = new VueRenderer(CommandsRoot, {
-        //   props,
-        //   editor: props.editor,
-        // })
-        // if (!props.clientRect) {
-        //   return
-        // }
-        // popup = tippy('body', {
-        //   getReferenceClientRect: props.clientRect as GetReferenceClientRect,
-        //   appendTo: () => document.body,
-        //   content: component.element!,
-        //   showOnCreate: true,
-        //   interactive: true,
-        //   trigger: 'manual',
-        //   placement: 'bottom-start',
-        // })
-      },
-
-      onUpdate(props: SuggestionProps) {
-        component.updateProps(props)
-
+        commandProps = props
         if (!props.clientRect) {
           return
         }
 
-        popup[0].setProps({
-          getReferenceClientRect: props.clientRect as GetReferenceClientRect,
+        const tr = props.editor.view.state.tr.setMeta('suggestionProps', {
+          clientRect: props.clientRect,
+          active: true,
+          props: commandProps,
         })
+
+        props.editor.view.dispatch(tr)
+      },
+
+      onUpdate(props: SuggestionProps) {
+        commandProps = props
+        if (!props.clientRect) {
+          return
+        }
+
+        const tr = props.editor.view.state.tr.setMeta('suggestionProps', {
+          clientRect: props.clientRect,
+          active: true,
+          props: commandProps,
+        })
+
+        props.editor.view.dispatch(tr)
       },
 
       onKeyDown(props: SuggestionKeyDownProps) {
         if (props.event.key === 'Escape') {
-          popup[0].hide()
-
+          const tr = props.view.state.tr.setMeta('suggestionProps', {
+            active: false,
+          })
+          props.view.dispatch(tr)
           return true
         }
 
-        return component.ref?.onKeyDown(props)
+        const tr = props.view.state.tr.setMeta('suggestionKeyDown', props)
+        props.view.dispatch(tr)
+
+        if (['ArrowUp', 'ArrowDown', 'Enter'].includes(props.event.key)) {
+          return true
+        }
       },
 
       onExit() {
-        popup[0].destroy()
-        component.destroy()
+        if (commandProps?.editor) {
+          const tr = commandProps.editor.view.state.tr.setMeta(
+            'suggestionProps',
+            {
+              active: false,
+            },
+          )
+          commandProps.editor.view.dispatch(tr)
+        }
       },
     }
   },

@@ -1,8 +1,8 @@
 <script setup lang="ts" generic="T extends EditorCommand">
 import type { EditorCommand } from '../utils/commands'
-import { EditorContent, BubbleMenu, Editor, type Range } from '@tiptap/vue-3'
-import { ref, provide, computed } from 'vue'
-import CommandsList from './CommandsList.vue'
+import { EditorContent, BubbleMenu, Editor } from '@tiptap/vue-3'
+import { computed } from 'vue'
+import CommandsRoot from './CommandsRoot.vue'
 import type { EditorState } from '@tiptap/pm/state'
 
 const props = defineProps<{
@@ -10,20 +10,6 @@ const props = defineProps<{
   commands?: T[]
   disableBubbleMenu?: boolean
 }>()
-
-const showCommands = ref(false)
-
-provide('showCommands', showCommands)
-
-const commandsState = ref<{
-  range: Range | null
-  query: string
-}>({
-  range: null,
-  query: '',
-})
-
-provide('commandsState', commandsState)
 
 function shouldShow(props: { state: EditorState }) {
   if (!props.state?.selection) {
@@ -52,7 +38,7 @@ function shouldShow(props: { state: EditorState }) {
 
 const filteredCommands = computed(() => {
   if (!props.editor) {
-    return props.commands
+    return props.commands ?? []
   }
   return props.commands?.filter(
     (c) => c.filter?.({ editor: props.editor! }) ?? true,
@@ -70,25 +56,25 @@ function hideDragHandle() {
 <template>
   <div v-if="editor" @mouseleave="hideDragHandle">
     <slot name="header" :editor="editor" />
-    <template v-if="showCommands">
-      <Teleport to="#pencil-commands__root">
-        <CommandsList
+
+    <CommandsRoot
+      v-if="filteredCommands"
+      :editor="editor"
+      :items="filteredCommands ?? []"
+    >
+      <template #commands="{ selectedIndex, selectItem, commands }">
+        <slot
+          name="commands"
           :editor="editor"
-          :items="filteredCommands ?? []"
-          v-slot="{ selectedIndex, selectItem, filteredItems }"
+          :commands="commands"
+          :selectedIndex="selectedIndex"
+          :selectItem="selectItem"
         >
-          <slot
-            name="commands"
-            :editor="editor"
-            :commands="filteredItems"
-            :selectedIndex="selectedIndex"
-            :selectItem="selectItem"
-          >
-            Use the #commands slot to add commands UI
-          </slot>
-        </CommandsList>
-      </Teleport>
-    </template>
+          Use the #commands slot to add commands UI
+        </slot>
+      </template>
+    </CommandsRoot>
+
     <BubbleMenu
       v-if="!disableBubbleMenu"
       :editor="editor"

@@ -49,6 +49,11 @@ export default defineNuxtModule<ModuleOptions>({
         as: 'useLinkEdit',
         from: resolver.resolve('./composables/useLinkEdit'),
       },
+      {
+        name: 'commandActions',
+        as: 'commandActions',
+        from: resolver.resolve('./utils/commands'),
+      },
     ])
   },
 })

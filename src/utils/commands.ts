@@ -10,8 +10,17 @@ export type EditorCommand = {
   [key: string]: any
 }
 
-const commandActions: Record<
-  string,
+type BuiltInCommands =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'bold'
+  | 'italic'
+  | 'divider'
+  | 'unorderedList'
+  | 'orderedList'
+export const commandActions: Record<
+  BuiltInCommands,
   ({ editor, range }: { editor: Editor; range: Range }) => void
 > = {
   h1: ({ editor, range }) => {
@@ -53,7 +62,7 @@ const commandActions: Record<
   orderedList: ({ editor, range }) => {
     editor.chain().focus().deleteRange(range).toggleOrderedList().run()
   },
-}
+} as const
 
 const builtInCommands: EditorCommand[] = [
   {
@@ -110,6 +119,6 @@ export function createCommands<T extends EditorCommand>(commands?: T[]) {
   if (!commands) {
     return builtInCommands as T[]
   }
-
+  console.log('commands', commands)
   return commands
 }
