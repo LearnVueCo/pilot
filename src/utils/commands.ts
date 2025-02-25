@@ -119,6 +119,5 @@ export function createCommands<T extends EditorCommand>(commands?: T[]) {
   if (!commands) {
     return builtInCommands as T[]
   }
-  console.log('commands', commands)
   return commands
 }
