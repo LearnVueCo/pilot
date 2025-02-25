@@ -1,4 +1,12 @@
-import { onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue'
+import {
+  MaybeRefOrGetter,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  toValue,
+  watch,
+  type Ref,
+} from 'vue'
 import { Editor, type Range } from '@tiptap/vue-3'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
@@ -8,9 +16,10 @@ type UseLinkEditOptions = {
 }
 
 export function useLinkEdit(
-  editor: Ref<Editor | null | undefined>,
+  editorRef: MaybeRefOrGetter<Editor | null | undefined>,
   options: UseLinkEditOptions = {},
 ) {
+  const editor = toValue(editorRef)
   const { highlight = true, highlightClass = 'bg-blue/50' } = options
 
   const position = ref<Range | null>(null)
@@ -20,15 +29,15 @@ export function useLinkEdit(
   const isNewLink = ref(false)
 
   function updateDecoration() {
-    if (!editor.value || !highlight) {
+    if (!editor || !highlight) {
       return
     }
-    const transaction = editor.value.state.tr.setMeta('run', 'run')
-    editor.value.view.dispatch(transaction)
+    const transaction = editor.state.tr.setMeta('run', 'run')
+    editor.view.dispatch(transaction)
   }
 
   function initializeLinkEdit(pos?: Range) {
-    if (!editor.value) {
+    if (!editor) {
       return
     }
     if (pos && (pos.from < 0 || pos.to < pos.from)) {
@@ -37,21 +46,21 @@ export function useLinkEdit(
     }
     if (
       pos ||
-      (!editor.value?.state.selection.empty &&
-        editor.value?.state.selection.from &&
-        editor.value?.state.selection.to)
+      (!editor.state.selection.empty &&
+        editor.state.selection.from &&
+        editor.state.selection.to)
     ) {
       position.value = pos ?? {
-        from: editor.value?.state.selection.from,
-        to: editor.value?.state.selection.to,
+        from: editor.state.selection.from,
+        to: editor.state.selection.to,
       }
 
-      editor.value.chain().focus().setTextSelection(position.value).run()
+      editor.chain().focus().setTextSelection(position.value).run()
       url.value = ''
       isNewLink.value = true
-      if (editor.value.getAttributes('link').href) {
-        url.value = editor.value.getAttributes('link').href
-        linkText.value = editor.value.state.doc.textBetween(
+      if (editor.getAttributes('link').href) {
+        url.value = editor.getAttributes('link').href
+        linkText.value = editor.state.doc.textBetween(
           position.value.from,
           position.value.to,
         )
@@ -63,7 +72,7 @@ export function useLinkEdit(
   }
 
   function setLink() {
-    if (!editor.value) {
+    if (!editor) {
       return
     }
     if (!position.value) {
@@ -71,8 +80,8 @@ export function useLinkEdit(
       return
     }
     if (linkText.value) {
-      editor.value
-        ?.chain()
+      editor
+        .chain()
         .insertContentAt(position.value, linkText.value)
         .setTextSelection({
           from: position.value.from,
@@ -81,7 +90,7 @@ export function useLinkEdit(
         .setLink({ href: url.value })
         .run()
     } else {
-      editor.value.chain().focus().setLink({ href: url.value }).run()
+      editor.chain().focus().setLink({ href: url.value }).run()
     }
 
     position.value = null
@@ -91,14 +100,14 @@ export function useLinkEdit(
   }
 
   function removeLink() {
-    if (!editor.value) {
+    if (!editor) {
       return
     }
 
     if (!position.value) {
       return
     }
-    editor.value
+    editor
       .chain()
       .focus()
       .setTextSelection({
@@ -115,9 +124,9 @@ export function useLinkEdit(
 
   watch(editing, (value) => {
     if (!value) {
-      const currentPosition = editor.value?.state.selection
+      const currentPosition = editor.state.selection
       if (currentPosition) {
-        editor.value?.chain().focus().setTextSelection(currentPosition).run()
+        editor.chain().focus().setTextSelection(currentPosition).run()
       }
       position.value = null
       url.value = ''
@@ -129,7 +138,7 @@ export function useLinkEdit(
   const key = new PluginKey('persistentHover')
 
   onMounted(() => {
-    editor.value?.registerPlugin(
+    editor.registerPlugin(
       new Plugin({
         key: key,
         state: {
@@ -160,7 +169,7 @@ export function useLinkEdit(
   })
 
   onBeforeUnmount(() => {
-    editor.value?.unregisterPlugin(key)
+    editor.unregisterPlugin(key)
   })
 
   return {

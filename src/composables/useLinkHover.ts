@@ -1,7 +1,7 @@
-import { ref, onMounted, onBeforeUnmount, readonly } from 'vue'
+import { ref, onMounted, onBeforeUnmount, readonly, toValue } from 'vue'
 import { type Editor, type Range } from '@tiptap/vue-3'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-import type { Ref } from 'vue'
+import type { MaybeRefOrGetter, Ref } from 'vue'
 import { useTimeoutFn } from '@vueuse/core'
 
 type UseLinkHoverOptions = {
@@ -16,9 +16,10 @@ type UseLinkHoverOptions = {
 }
 
 export function useLinkHover(
-  editor: Ref<Editor | null | undefined>,
+  editorRef: MaybeRefOrGetter<Editor | null | undefined>,
   options: UseLinkHoverOptions = {},
 ) {
+  const editor = toValue(editorRef)
   const { immediatelyClose = false, delay = 400 } = options
   const to = ref<string | null>(null)
   const isHovered = ref(false)
@@ -47,11 +48,11 @@ export function useLinkHover(
   )
 
   onMounted(() => {
-    if (!editor.value) {
+    if (!editor) {
       return
     }
 
-    editor.value.registerPlugin(
+    editor.registerPlugin(
       new Plugin({
         key: pluginKey,
         props: {
@@ -106,10 +107,10 @@ export function useLinkHover(
   })
 
   onBeforeUnmount(() => {
-    if (!editor.value) {
+    if (!editor) {
       return
     }
-    editor.value.unregisterPlugin(pluginKey)
+    editor.unregisterPlugin(pluginKey)
   })
 
   return {
