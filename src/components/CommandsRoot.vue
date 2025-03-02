@@ -40,7 +40,6 @@ const position = ref({
 const query = ref('')
 const range = ref<Range | null>(null)
 
-// Lifted from CommandsList.vue
 const filteredItems = computed(() => {
   return (props.items ?? []).filter(
     (item) =>
