@@ -19,7 +19,7 @@ export function useLinkEdit(
   editorRef: MaybeRefOrGetter<Editor | null | undefined>,
   options: UseLinkEditOptions = {},
 ) {
-  const editor = toValue(editorRef)
+  const editor = editorRef
   const { highlight = true, highlightClass = 'bg-blue/50' } = options
 
   const position = ref<Range | null>(null)
@@ -32,8 +32,8 @@ export function useLinkEdit(
     if (!editor || !highlight) {
       return
     }
-    const transaction = editor.state.tr.setMeta('run', 'run')
-    editor.view.dispatch(transaction)
+    const transaction = toValue(editor).state.tr.setMeta('run', 'run')
+    toValue(editor).view.dispatch(transaction)
   }
 
   function initializeLinkEdit(pos?: Range) {
@@ -46,21 +46,20 @@ export function useLinkEdit(
     }
     if (
       pos ||
-      (!editor.state.selection.empty &&
-        editor.state.selection.from &&
-        editor.state.selection.to)
+      (!toValue(editor).state.selection.empty &&
+        toValue(editor).state.selection.from &&
+        toValue(editor).state.selection.to)
     ) {
       position.value = pos ?? {
-        from: editor.state.selection.from,
-        to: editor.state.selection.to,
+        from: toValue(editor).state.selection.from,
+        to: toValue(editor).state.selection.to,
       }
-
-      editor.chain().focus().setTextSelection(position.value).run()
+      toValue(editor).chain().focus().setTextSelection(position.value).run()
       url.value = ''
       isNewLink.value = true
-      if (editor.getAttributes('link').href) {
-        url.value = editor.getAttributes('link').href
-        linkText.value = editor.state.doc.textBetween(
+      if (toValue(editor).getAttributes('link').href) {
+        url.value = toValue(editor).getAttributes('link').href
+        linkText.value = toValue(editor).state.doc.textBetween(
           position.value.from,
           position.value.to,
         )
@@ -80,7 +79,7 @@ export function useLinkEdit(
       return
     }
     if (linkText.value) {
-      editor
+      toValue(editor)
         .chain()
         .insertContentAt(position.value, linkText.value)
         .setTextSelection({
@@ -90,7 +89,7 @@ export function useLinkEdit(
         .setLink({ href: url.value })
         .run()
     } else {
-      editor.chain().focus().setLink({ href: url.value }).run()
+      toValue(editor).chain().focus().setLink({ href: url.value }).run()
     }
 
     position.value = null
@@ -100,14 +99,14 @@ export function useLinkEdit(
   }
 
   function removeLink() {
-    if (!editor) {
+    if (!toValue(editor)) {
       return
     }
 
     if (!position.value) {
       return
     }
-    editor
+    toValue(editor)
       .chain()
       .focus()
       .setTextSelection({
@@ -124,9 +123,9 @@ export function useLinkEdit(
 
   watch(editing, (value) => {
     if (!value) {
-      const currentPosition = editor.state.selection
+      const currentPosition = toValue(editor).state.selection
       if (currentPosition) {
-        editor.chain().focus().setTextSelection(currentPosition).run()
+        toValue(editor).chain().focus().setTextSelection(currentPosition).run()
       }
       position.value = null
       url.value = ''
@@ -138,7 +137,7 @@ export function useLinkEdit(
   const key = new PluginKey('persistentHover')
 
   onMounted(() => {
-    editor.registerPlugin(
+    toValue(editor).registerPlugin(
       new Plugin({
         key: key,
         state: {
@@ -169,7 +168,9 @@ export function useLinkEdit(
   })
 
   onBeforeUnmount(() => {
-    editor.unregisterPlugin(key)
+    if (editor) {
+      toValue(editor).unregisterPlugin(key)
+    }
   })
 
   return {
