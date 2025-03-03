@@ -8,8 +8,7 @@ import {
   type Ref,
 } from 'vue'
 import { Editor, type Range } from '@tiptap/vue-3'
-import { Plugin, PluginKey } from '@tiptap/pm/state'
-import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { useFakeHighlight } from './useFakeHighlight'
 type UseLinkEditOptions = {
   highlight?: boolean
   highlightClass?: string
@@ -20,21 +19,18 @@ export function useLinkEdit(
   options: UseLinkEditOptions = {},
 ) {
   const editor = editorRef
-  const { highlight = true, highlightClass = 'bg-blue/50' } = options
-
-  const position = ref<Range | null>(null)
+  const { highlight: shouldHighlight = true, highlightClass = 'bg-blue/50' } =
+    options
   const editing = ref(false)
+
+  const { highlight, unhighlight } = useFakeHighlight(editor, {
+    highlightClass,
+  })
+
   const url = ref('')
   const linkText = ref<string>()
   const isNewLink = ref(false)
-
-  function updateDecoration() {
-    if (!editor || !highlight) {
-      return
-    }
-    const transaction = toValue(editor).state.tr.setMeta('run', 'run')
-    toValue(editor).view.dispatch(transaction)
-  }
+  const position = ref<Range | null>(null)
 
   function initializeLinkEdit(pos?: Range) {
     if (!editor) {
@@ -65,7 +61,9 @@ export function useLinkEdit(
         )
         isNewLink.value = false
       }
-      updateDecoration()
+      if (shouldHighlight) {
+        highlight(position.value)
+      }
       editing.value = true
     }
   }
@@ -131,45 +129,8 @@ export function useLinkEdit(
       url.value = ''
       linkText.value = undefined
     }
-    updateDecoration()
-  })
-
-  const key = new PluginKey('persistentHover')
-
-  onMounted(() => {
-    toValue(editor).registerPlugin(
-      new Plugin({
-        key: key,
-        state: {
-          init(_config, state) {
-            return DecorationSet.create(state.doc, [])
-          },
-          apply(tr, oldState) {
-            if (position.value && highlight) {
-              const decoration = Decoration.inline(
-                position.value.from,
-                position.value.to,
-                {
-                  class: highlightClass,
-                },
-              )
-              return DecorationSet.create(tr.doc, [decoration])
-            }
-            return DecorationSet.create(tr.doc, [])
-          },
-        },
-        props: {
-          decorations(state) {
-            return this.getState(state)
-          },
-        },
-      }),
-    )
-  })
-
-  onBeforeUnmount(() => {
-    if (editor) {
-      toValue(editor).unregisterPlugin(key)
+    if (shouldHighlight) {
+      unhighlight()
     }
   })
 

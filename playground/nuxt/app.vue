@@ -7,13 +7,23 @@ const { editor, commands } = useEditor({
 
 const defaultMode = ref(true)
 function handleAnotherClick() {
+  highlight()
   defaultMode.value = !defaultMode.value
 }
+
+const { highlight, unhighlight } = useFakeHighlight(editor, {
+  highlightClass: 'bg-blue',
+})
 </script>
 
 <template>
-  <Editor :editor="editor" :commands="commands">
-    <BubbleMenu>
+  <Editor
+    @keydown.esc="highlight()"
+    @click.middle="unhighlight()"
+    :editor="editor"
+    :commands="commands"
+  >
+    <BubbleMenu @close="unhighlight()">
       <template #menu="{ editor, visible }">
         <Transition name="fade">
           <div v-if="visible">
@@ -43,7 +53,7 @@ function handleAnotherClick() {
               <button @click="handleAnotherClick">s</button>
             </div>
             <div v-else>
-              <input type="text" />
+              <input type="text" @focus="highlight()" />
               <button @click="handleAnotherClick">switch</button>
             </div>
           </div>
@@ -53,7 +63,7 @@ function handleAnotherClick() {
   </Editor>
 </template>
 
-<style scoped>
+<style>
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.2s ease;
@@ -63,5 +73,9 @@ function handleAnotherClick() {
 .fade-leave-to {
   opacity: 0;
   scale: 0.9;
+}
+
+.bg-blue {
+  background: rgba(226, 35, 35, 0.28);
 }
 </style>

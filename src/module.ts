@@ -50,6 +50,11 @@ export default defineNuxtModule<ModuleOptions>({
         from: resolver.resolve('./composables/useLinkEdit'),
       },
       {
+        name: 'useFakeHighlight',
+        as: 'useFakeHighlight',
+        from: resolver.resolve('./composables/useFakeHighlight'),
+      },
+      {
         name: 'commandActions',
         as: 'commandActions',
         from: resolver.resolve('./utils/commands'),
