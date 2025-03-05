@@ -1,7 +1,15 @@
 <script setup lang="ts" generic="T extends EditorCommand">
-import { ref, onBeforeMount, onUnmounted, computed, watch } from 'vue'
+import {
+  ref,
+  onBeforeMount,
+  onUnmounted,
+  computed,
+  watch,
+  inject,
+  toValue,
+  type MaybeRef,
+} from 'vue'
 import type { Editor, Range } from '@tiptap/vue-3'
-import CommandsList from './CommandsList.vue'
 import { SuggestionKeyDownProps } from '@tiptap/suggestion'
 import {
   flip,
@@ -14,25 +22,22 @@ import type { EditorCommand } from '../utils/commands'
 import { Transaction } from '@tiptap/pm/state'
 
 const props = defineProps<{
-  editor: Editor
-  items?: T[]
+  commands?: T[]
 }>()
 
-// Floating UI refs
 const reference = ref<VirtualElement | null>(null)
 const floating = ref<HTMLElement | null>(null)
 
-// Setup floating UI
+// TODO: Make this prop-configurable
 const { x, y, strategy, update } = useFloating(reference, floating, {
   placement: 'bottom-start',
-  middleware: [
-    offset(6), // Add 6px offset from the reference
-    flip(), // Flip to opposite side if no space
-    shift(), // Shift horizontally if needed
-  ],
+  middleware: [offset(6), flip(), shift()],
 })
 
-// Add positioning state
+const injectedEditor = inject<MaybeRef<Editor | null>>('editor')
+
+const editor = toValue(injectedEditor)
+
 const position = ref({
   active: false,
 })
@@ -41,7 +46,7 @@ const query = ref('')
 const range = ref<Range | null>(null)
 
 const filteredItems = computed(() => {
-  return (props.items ?? []).filter(
+  return (props.commands ?? []).filter(
     (item) =>
       !query.value.length ||
       item.label.toLowerCase().startsWith(query.value.toLowerCase()) ||
@@ -87,9 +92,9 @@ function onSuggestionKeyDown({ transaction }: { transaction: Transaction }) {
 
 // Watch for suggestion updates from the editor
 onBeforeMount(() => {
-  props.editor?.on('transaction', onTransaction)
+  editor?.on('transaction', onTransaction)
 
-  props.editor?.on('transaction', onSuggestionKeyDown)
+  editor?.on('transaction', onSuggestionKeyDown)
 })
 
 onUnmounted(() => {
@@ -97,20 +102,61 @@ onUnmounted(() => {
     position.value.active = false
   }
 
-  props.editor?.off('transaction', onTransaction)
-  props.editor?.off('transaction', onSuggestionKeyDown)
+  editor?.off('transaction', onTransaction)
+  editor?.off('transaction', onSuggestionKeyDown)
 })
 
-function onKeyDown({ event }: { event: KeyboardEvent }): boolean {
-  const el = document.querySelector('#pencil-commands__list')
-  if (el) {
-    el.dispatchEvent(new KeyboardEvent('keydown', { key: event.key }))
-  }
+const selectedIndex = ref(0)
 
-  if (['ArrowUp', 'ArrowDown', 'Enter'].includes(event.key)) {
+function onKeyDown({ event }: { event: KeyboardEvent }): boolean {
+  if (event.key === 'ArrowUp') {
+    upHandler()
     return true
   }
+
+  if (event.key === 'ArrowDown') {
+    downHandler()
+    return true
+  }
+
+  if (event.key === 'Enter') {
+    enterHandler()
+    return true
+  }
+
   return false
+}
+
+function upHandler() {
+  if (!props.commands?.length) {
+    return
+  }
+
+  selectedIndex.value =
+    (selectedIndex.value + props.commands.length - 1) % props.commands.length
+}
+
+function downHandler() {
+  if (!props.commands?.length) {
+    return
+  }
+
+  selectedIndex.value = (selectedIndex.value + 1) % props.commands.length
+}
+
+function enterHandler() {
+  if (!props.commands?.length) {
+    return
+  }
+
+  selectItem(selectedIndex.value)
+}
+
+function selectItem(index: number) {
+  const item = props.commands[index]
+  if (item && range.value) {
+    item.command({ editor: editor, range: range.value })
+  }
 }
 </script>
 
@@ -118,7 +164,7 @@ function onKeyDown({ event }: { event: KeyboardEvent }): boolean {
   <div
     v-if="position.active"
     ref="floating"
-    id="pencil-commands__root"
+    id="pilot-commands__root"
     class="dropdown-menu"
     :style="{
       position: strategy,
@@ -129,33 +175,11 @@ function onKeyDown({ event }: { event: KeyboardEvent }): boolean {
       zIndex: 100,
     }"
   >
-    <CommandsList
-      v-if="position.active"
+    <slot
       :editor="editor"
-      :items="filteredItems"
-      :range="range"
-      :query="query"
-      v-slot="{ selectedIndex, selectItem }"
-    >
-      <slot
-        name="commands"
-        :editor="editor"
-        :commands="filteredItems"
-        :selectedIndex="selectedIndex"
-        :selectItem="selectItem"
-      >
-        <!-- Default commands UI -->
-        <div class="commands-list">
-          <button
-            v-for="(item, index) in filteredItems"
-            :key="index"
-            :class="{ 'is-selected': index === selectedIndex }"
-            @click="selectItem(index)"
-          >
-            {{ item.label }}
-          </button>
-        </div>
-      </slot>
-    </CommandsList>
+      :commands="filteredItems"
+      :selectedIndex="selectedIndex"
+      :selectItem="selectItem"
+    />
   </div>
 </template>

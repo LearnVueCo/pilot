@@ -95,8 +95,6 @@ export const CommandExtension = () => {
         }),
       ]
     },
-  }).configure({
-    suggestion,
   })
 
   return extension.configure({

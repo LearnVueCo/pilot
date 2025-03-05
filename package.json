@@ -1,8 +1,8 @@
 {
-  "name": "@learnvue/pencil",
-  "version": "1.0.0",
-  "description": "My new Nuxt module",
-  "repository": "your-org/my-module",
+  "name": "@learnvue/pilot",
+  "version": "0.0.1",
+  "description": "WYSIWYG editor for Vue",
+  "repository": "LearnVueCo/pilot",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -30,7 +30,8 @@
   "sideEffects": false,
   "scripts": {
     "build": "unbuild",
-    "prepack": "pnpm run build"
+    "prepack": "pnpm run build",
+    "docs": "nuxi dev docs"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.6",
@@ -66,5 +67,8 @@
     "unbuild": "^3.3.1",
     "vitest": "^3.0.5",
     "vue-tsc": "^2.2.0"
+  },
+  "resolutions": {
+    "@learnvue/pilot": "workspace:*"
   }
 }

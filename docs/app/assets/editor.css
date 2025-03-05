@@ -125,7 +125,6 @@
 /* MAIN EDITOR */
 
 .tiptap:not(.editor-title .tiptap)  {
-  min-height: 100vh;
   text-align: left;
 }
 

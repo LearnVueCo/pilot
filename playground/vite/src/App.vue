@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useEditor, Editor, BubbleMenu } from '@learnvue/pencil'
-import { EditorExtensions } from '@learnvue/pencil/extensions'
+import { useEditor, Editor, BubbleMenu } from '@learnvue/pilot'
+import { EditorExtensions } from '@learnvue/pilot/extensions'
 
 const { editor, commands } = useEditor({
   editor: {

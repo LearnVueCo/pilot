@@ -1,0 +1,54 @@
+---
+title: 'Bubble Menu'
+subheading: 'Support editing actions in a floating menu'
+---
+
+We've built a custom BubbleMenu component, inspired by [tiptap](https://tiptap.dev/api/components/bubble-menu), that uses Floating UI for positioning.
+
+The BubbleMenu will show whenever you select text in the editor.
+
+:editor-content
+
+## Usage
+
+To use the BubbleMenu component, you can pass it as a child to the `Editor` component.
+
+```vue
+<template>
+  <Editor>
+    <BubbleMenu>
+      <div>
+        <button @click="editor.chain().focus().toggleBold().run()">Bold</button>
+        <button @click="editor.chain().focus().toggleItalic().run()">
+          Italic
+        </button>
+      </div>
+    </BubbleMenu>
+  </Editor>
+</template>
+```
+
+## Transitions
+
+If you want to add enter/leave transitions to your bubble menu, you can instead use the `menu` slot. While the default slot handles all conditional rendering for you, the `menu` content exposes a `visible` property that you can use for more transitional control.
+
+:editor-content{transitionBubbleMenu}
+
+```vue
+<template>
+  <Editor>
+    <BubbleMenu>
+      <template #menu="{ editor, visible }">
+        <Transition name="fade">
+          <div v-if="visible">
+            <!-- Have to control the v-if -->
+            <button @click="editor.chain().focus().toggleBold().run()">
+              Bold
+            </button>
+          </div>
+        </Transition>
+      </template>
+    </BubbleMenu>
+  </Editor>
+</template>
+```

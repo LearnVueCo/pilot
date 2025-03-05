@@ -11,8 +11,8 @@ export interface ModuleOptions {}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'pencil',
-    configKey: 'pencil',
+    name: 'pilot',
+    configKey: 'pilot',
   },
   // Default configuration options of the Nuxt module
   defaults: {},
@@ -43,11 +43,6 @@ export default defineNuxtModule<ModuleOptions>({
         name: 'useLinkHover',
         as: 'useLinkHover',
         from: resolver.resolve('./composables/useLinkHover'),
-      },
-      {
-        name: 'useLinkEdit',
-        as: 'useLinkEdit',
-        from: resolver.resolve('./composables/useLinkEdit'),
       },
       {
         name: 'useFakeHighlight',

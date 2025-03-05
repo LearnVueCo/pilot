@@ -2,7 +2,7 @@
 import type { EditorCommand } from '../utils/commands'
 import { EditorContent, type Editor } from '@tiptap/vue-3'
 import { computed, provide, watch } from 'vue'
-import CommandsRoot from './CommandsRoot.vue'
+import CommandsRoot from './Commands.vue'
 
 const props = defineProps<{
   editor?: Editor | null
@@ -31,23 +31,6 @@ function hideDragHandle() {
 <template>
   <div v-if="editor" @mouseleave="hideDragHandle">
     <slot />
-    <CommandsRoot
-      v-if="filteredCommands"
-      :editor="editor"
-      :items="filteredCommands ?? []"
-    >
-      <template #commands="{ selectedIndex, selectItem, commands }">
-        <slot
-          name="commands"
-          :editor="editor"
-          :commands="commands"
-          :selectedIndex="selectedIndex"
-          :selectItem="selectItem"
-        >
-          Use the #commands slot to add commands UI
-        </slot>
-      </template>
-    </CommandsRoot>
     <EditorContent :editor="editor" />
   </div>
 </template>

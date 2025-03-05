@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="px-4">
     <NuxtRouteAnnouncer />
     <AppHeader />
-    <div class="container mx-auto flex w-full">
-      <AppSidebar class="mr-8" />
+    <div class="relative mx-auto flex w-full flex-col md:px-2 lg:flex-row">
+      <AppSidebar />
       <NuxtPage />
     </div>
   </div>

@@ -53,7 +53,7 @@ function selectItem(index: number): void {
 </script>
 
 <template>
-  <div id="pencil-commands__list" @keydown="onKeyDown">
+  <div id="pilor-commands__list" @keydown="onKeyDown">
     <slot
       :selectedIndex="selectedIndex"
       :selectItem="selectItem"

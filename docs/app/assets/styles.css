@@ -1,11 +1,58 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@plugin "@tailwindcss/typography";
+
+@source '../../content/**/*.md';
 
 @theme {
 
   --breakpoint-3xl: 90rem;
   --breakpoint-4xl: 114rem;
+
+
+
+  --color-aquamarine-50: #ebfef7;
+  --color-aquamarine-100: #cefdeb;
+  --color-aquamarine-200: #a1f9da;
+  --color-aquamarine-300: #55efc4;
+  --color-aquamarine-400: #28dfb1;
+  --color-aquamarine-500: #03c69c;
+  --color-aquamarine-600: #00a180;
+  --color-aquamarine-700: #00816a;
+  --color-aquamarine-800: #006655;
+  --color-aquamarine-900: #005448;
+  --color-aquamarine-950: #002f2a;
+
+
+
+
+
+
+  --color-gray-50: #dde2e3;
+  --color-gray-100: #d5dbdc;
+  --color-gray-200: #bec8cb;
+  --color-gray-300: #9daaaf;
+  --color-gray-400: #76888f;
+  --color-gray-500: #5a676d;
+  --color-gray-600: #444e55;
+  --color-gray-700: #343b41;
+  --color-gray-800: #292e32;
+  --color-gray-900: #13161b;
+  --color-gray-950: #0A0C0F;
+  --font-sans: Geist, -apple-system, sans-serif;
+  --font-mono: Dank Mono, monospace;
+  --font-handwriting: 'Cabin Sketch', cursive;
+  --tw-prose-invert-body: var(--color-gray-200);
+}
+
+
+
+
+
+
+:root {
+    --default-font-family: var(--font-sans);
 
   --color-green: #15ca82;
   --color-green-50: #ecfdf4;
@@ -20,68 +67,16 @@
   --color-green-900: #074d35;
   --color-green-950: #032b1f;
 
-
-  --color-blue: #5f8af0;
-  --color-blue-50: #c8d7fa;
-  --color-blue-100: #bccef9;
-  --color-blue-200: #a5bdf7;
-  --color-blue-300: #8eacf4;
-  --color-blue-400: #769bf2;
-  --color-blue-500: #5f8af0;
-  --color-blue-600: #2c64eb;
-  --color-blue-700: #134acc;
-  --color-blue-800: #0e3798;
-  --color-blue-900: #092565;
-
-  --color-gray-50: #dde2e3;
-  --color-gray-100: #d5dbdc;
-  --color-gray-200: #bec8cb;
-  --color-gray-300: #9daaaf;
-  --color-gray-400: #76888f;
-  --color-gray-500: #5a676d;
-  --color-gray-600: #444e55;
-  --color-gray-700: #343b41;
-  --color-gray-800: #292e32;
-  --color-gray-900: #13161b;
-  --color-gray-950: #0f1115;
-  --font-sans: Roboto, -apple-system, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  --font-mono: Dank Mono, monospace;
-  --tw-prose-invert-body: var(--color-gray-200);
-}
-
-
-
-@utility container {
-  margin-inline: auto;
-
-  @media (width < theme(--breakpoint-xl)) {
-    max-width: 90%;
-  }
-
-  @media (width >=theme(--breakpoint-xl)) {
-    max-width: 74rem;
-  }
-
-  @media (width >=theme(--breakpoint-2xl)) {
-    max-width: 80rem;
-  }
-
-}
-
-
-
-
-:root {
-  --ui-primary: var(--color-green-500);
-  --ui-primary-100: var(--color-green-100);
-  --ui-primary-200: var(--color-green-200);
-  --ui-primary-300: var(--color-green-300);
-  --ui-primary-400: var(--color-green-400);
-  --ui-primary-500: var(--color-green-500);
-  --ui-primary-600: var(--color-green-600);
-  --ui-primary-700: var(--color-green-700);
-  --ui-primary-800: var(--color-green-800);
-  --ui-primary-900: var(--color-green-900);
+  --ui-primary: var(--color-aquamarine-400);
+  --ui-primary-100: var(--color-aquamarine-100);
+  --ui-primary-200: var(--color-aquamarine-200);
+  --ui-primary-300: var(--color-aquamarine-300);
+  --ui-primary-400: var(--color-aquamarine-400);
+  --ui-primary-500: var(--color-aquamarine-500);
+  --ui-primary-600: var(--color-aquamarine-600);
+  --ui-primary-700: var(--color-aquamarine-700);
+  --ui-primary-800: var(--color-aquamarine-800);
+  --ui-primary-900: var(--color-aquamarine-900);
 
   --ui-secondary: var(--color-blue-500);
   --ui-secondary-100: var(--color-blue-100);
@@ -150,4 +145,38 @@
   color-scheme: dark;
 }
 
+.dropped::before {
+  @apply content-[''] absolute top-4 left-4 w-full h-full bg-[var(--ui-primary-500)]  opacity-70;
+}
 
+.dropped {
+  position: relative;
+}
+
+.prose pre {
+  @apply bg-gray-900/50;
+}
+
+.prose h1 a, .prose h2 a, .prose h3 a, .prose h4 a, .prose h5 a, .prose h6 a {
+  @apply no-underline font-bold text-white;
+}
+
+.prose a{
+  @apply text-[var(--ui-primary)] hover:opacity-70 transition-opacity no-underline hover:underline;
+}
+
+.prose a:has(code) {
+  @apply text-[var(--ui-primary)] hover:opacity-70 transition-opacity no-underline hover:no-underline;
+}
+
+.prose code:not(pre code)::before, .prose code:not(pre code)::after {
+  @apply content-['']
+}
+
+.prose  code:not(pre code) {
+  @apply bg-gray-900 px-2 mx-0.5 py-1 rounded;
+}
+
+.prose a code:not(pre code) {
+  @apply border border-dashed border-[var(--ui-primary-800)];
+}
