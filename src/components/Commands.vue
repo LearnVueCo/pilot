@@ -166,8 +166,8 @@ function selectItem(index: number) {
 <template>
   <div
     v-if="position.active"
-    ref="floating"
     id="pilot-commands__root"
+    ref="floating"
     class="dropdown-menu"
     :style="{
       position: strategy,
@@ -181,8 +181,8 @@ function selectItem(index: number) {
     <slot
       :editor="editor"
       :commands="filteredItems"
-      :selectedIndex="selectedIndex"
-      :selectItem="selectItem"
+      :selected-index="selectedIndex"
+      :select-item="selectItem"
     />
   </div>
 </template>

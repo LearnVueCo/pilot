@@ -7,7 +7,8 @@ import {
   onUnmounted,
   computed,
 } from 'vue'
-import { useFloating, type VirtualElement } from '@floating-ui/vue'
+import { useFloating } from '@floating-ui/vue'
+import type { VirtualElement } from '@floating-ui/vue'
 import { type Editor, posToDOMRect, type Range } from '@tiptap/vue-3'
 import { onClickOutside, useMouseInElement, useMouse } from '@vueuse/core'
 import { flip } from '@floating-ui/core'
@@ -129,9 +130,17 @@ onUnmounted(() => {
 </script>
 <template>
   <Teleport to="body">
-    <div v-if="open" ref="tooltip" :style="floatingStyles" v-bind="$attrs">
+    <div
+      v-if="open"
+      ref="tooltip"
+      :style="floatingStyles"
+      v-bind="$attrs"
+    >
       <slot />
     </div>
-    <div v-else v-bind="$attrs"></div>
+    <div
+      v-else
+      v-bind="$attrs"
+    />
   </Teleport>
 </template>

@@ -1,13 +1,13 @@
 import {
   defineNuxtModule,
-  addPlugin,
   createResolver,
   addComponentsDir,
   addImports,
 } from '@nuxt/kit'
-import { consola } from 'consola'
 // Module options TypeScript interface definition
-export interface ModuleOptions {}
+export interface ModuleOptions {
+  prefix?: string
+}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
@@ -16,7 +16,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   // Default configuration options of the Nuxt module
   defaults: {},
-  setup(_options, nuxt) {
+  setup(_options, _nuxt) {
     const resolver = createResolver(import.meta.url)
 
     addComponentsDir({

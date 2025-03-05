@@ -1,7 +1,7 @@
 import { ref, onMounted, onBeforeUnmount, readonly, toValue } from 'vue'
 import { type Editor, type Range } from '@tiptap/vue-3'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-import type { MaybeRefOrGetter, Ref } from 'vue'
+import type { MaybeRefOrGetter } from 'vue'
 import { useTimeoutFn } from '@vueuse/core'
 
 type UseLinkHoverOptions = {

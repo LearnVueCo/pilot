@@ -7,7 +7,7 @@ export type EditorCommand = {
   icon?: string
   filter?: ({ editor }: { editor: Editor }) => boolean
   altNames?: string[]
-  [key: string]: any
+  [key: string]: unknown
 }
 
 type BuiltInCommands =

@@ -1,6 +1,6 @@
 // modified from https://github.com/steven-tey/novel/blob/main/packages/headless/src/plugins/upload-images.tsx
+import type { EditorState } from '@tiptap/pm/state'
 import {
-  type EditorState,
   Plugin,
   PluginKey,
   Transaction,
@@ -107,7 +107,7 @@ export const handleImageDrop = (
     if (!file) {
       return true
     }
-    let pos = coordinates?.pos ? coordinates.pos - 1 : 0
+    const pos = coordinates?.pos ? coordinates.pos - 1 : 0
 
     if (uploadFn) {
       loadAndInsertRemoteImage(file, view, pos, uploadFn)
@@ -229,7 +229,7 @@ const loadAndInsertRemoteImage = async (
     }
 
     insertImageNode(view, currentPos, currentPos, src, id)
-  } catch (error) {
+  } catch (_error) {
     const transaction = view.state.tr
       .delete(pos, pos)
       .setMeta(uploadKey, { remove: { id } })

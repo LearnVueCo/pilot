@@ -1,4 +1,4 @@
-import { Extension } from '@tiptap/core'
+import { Editor, Extension } from '@tiptap/core'
 import Suggestion from '@tiptap/suggestion'
 import {
   type SuggestionKeyDownProps,
@@ -72,6 +72,8 @@ const suggestion = {
   },
 }
 
+type CommandFunc = ({ editor, range }: { editor: Editor; range: Range }) => void
+
 export const CommandExtension = () => {
   const extension = Extension.create({
     name: 'custom-commands',
@@ -80,7 +82,7 @@ export const CommandExtension = () => {
       return {
         suggestion: {
           char: '/',
-          command: ({ editor, range, props }: any) => {
+          command: ({ editor, range, props }: { editor: Editor; range: Range; props: { command: CommandFunc } }) => {
             props.command({ editor, range })
           },
         },

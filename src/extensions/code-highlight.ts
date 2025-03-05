@@ -1,5 +1,4 @@
 import { type NodeViewProps, VueNodeViewRenderer } from '@tiptap/vue-3'
-import defu from 'defu'
 import {
   CodeBlockShiki,
   type CodeBlockShikiOptions,

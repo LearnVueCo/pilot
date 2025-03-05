@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T extends EditorCommand">
 import type { EditorCommand } from '../utils/commands'
 import { EditorContent, type Editor } from '@tiptap/vue-3'
-import { computed, provide } from 'vue'
+import { provide } from 'vue'
 
 const props = defineProps<{
   editor?: Editor | null
@@ -10,14 +10,6 @@ const props = defineProps<{
 
 provide('editor', () => props.editor)
 
-const filteredCommands = computed(() => {
-  if (!props.editor) {
-    return props.commands ?? []
-  }
-  return props.commands?.filter(
-    (c) => c.filter?.({ editor: props.editor! }) ?? true,
-  )
-})
 
 function hideDragHandle() {
   const dragHandle = document.querySelector('.drag-handle')
@@ -28,7 +20,10 @@ function hideDragHandle() {
 </script>
 
 <template>
-  <div v-if="editor" @mouseleave="hideDragHandle">
+  <div
+    v-if="editor"
+    @mouseleave="hideDragHandle"
+  >
     <slot />
     <EditorContent :editor="editor" />
   </div>

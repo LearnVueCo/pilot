@@ -145,7 +145,7 @@ onMounted(() => {
   editor.registerPlugin(
     new Plugin({
       key: pluginKey,
-      view: (view) => {
+      view: (_view) => {
         return {
           update: (view) => {
             handleUpdate(view)
@@ -163,12 +163,12 @@ onBeforeUnmount(() => {
   editor.unregisterPlugin(pluginKey)
 })
 
-function handleMousedown(event: MouseEvent) {
+function handleMousedown(_event: MouseEvent) {
   preventHide.value = true
 }
 
 const focusin = ref(false)
-function handleFocusin(event: FocusEvent) {
+function handleFocusin(_event: FocusEvent) {
   focusin.value = true
 }
 
@@ -188,21 +188,25 @@ async function handleFocusout(event: FocusEvent) {
 <template>
   <div
     v-if="editor && (isVisible || $slots['menu'])"
-    class="bubble-menu"
     ref="menu"
+    class="bubble-menu"
     :style="floatingStyles"
+    style="z-index: 100"
+    :data-state="isVisible ? 'open' : 'closed'"
     @mousedown.capture="handleMousedown"
     @focusin="handleFocusin"
     @focusout="handleFocusout"
-    style="z-index: 100"
-    :data-state="isVisible ? 'open' : 'closed'"
   >
-    <slot :visible="isVisible" name="menu" :editor="editor">
+    <slot
+      :visible="isVisible"
+      name="menu"
+      :editor="editor"
+    >
       <div v-if="isVisible">
         <slot :editor="editor">
           <button
-            @click="editor.chain().focus().toggleBold().run()"
             style="cursor: pointer"
+            @click="editor.chain().focus().toggleBold().run()"
           >
             Bold
           </button>

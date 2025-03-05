@@ -1,5 +1,4 @@
 import Image, { type ImageOptions } from '@tiptap/extension-image'
-import { defu } from 'defu'
 import { UploadImagesPlugin, type UploadFn } from '../utils/upload-image'
 
 export type ImageExtensionOptions = Partial<

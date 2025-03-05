@@ -20,36 +20,33 @@ const { editor, commands } = useEditor({
 
 <template>
   <div style="height: 100vh; width: 100vw">
-    <Editor :editor="editor" :commands="commands" :style="{}">
-      <template #commands="{ commands, selectedIndex, selectItem }">
-        <button
-          v-for="(command, index) in commands"
-          :key="index"
-          :class="{ 'is-active': selectedIndex === index }"
-          @click="selectItem(index)"
-        >
-          {{ command.label }}
-        </button>
-      </template>
+    <Editor
+      :editor="editor"
+      :commands="commands"
+      :style="{}"
+    >
       <BubbleMenu>
-        <template #menu="{ editor, visible }">
+        <template
+          v-if="editor"
+          #menu="{ visible }"
+        >
           <Transition name="fade">
             <div v-if="visible">
               <button
-                @click="editor.chain().focus().toggleBold().run()"
                 :class="{ 'is-active': editor.isActive('bold') }"
+                @click="editor.chain().focus().toggleBold().run()"
               >
                 Bold
               </button>
               <button
-                @click="editor.chain().focus().toggleItalic().run()"
                 :class="{ 'is-active': editor.isActive('italic') }"
+                @click="editor.chain().focus().toggleItalic().run()"
               >
                 Italic
               </button>
               <button
-                @click="editor.chain().focus().toggleStrike().run()"
                 :class="{ 'is-active': editor.isActive('strike') }"
+                @click="editor.chain().focus().toggleStrike().run()"
               >
                 Strike
               </button>
