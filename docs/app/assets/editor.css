@@ -28,12 +28,20 @@
   @apply pl-8;
 }
 
+.tiptap ul[data-type="taskList"] li[data-checked="true"] {
+  @apply opacity-50 line-through;
+}
+
 .tiptap ul[data-type="taskList"]::before, .tiptap ul[data-type="taskList"] li::before {
   @apply hidden;
 }
 
 .tiptap ul[data-type="taskList"] li {
   @apply flex items-start gap-2;
+}
+
+.tiptap ul[data-type="taskList"] li p {
+  @apply my-0;
 }
 
 .tiptap img.ProseMirror-selectednode {

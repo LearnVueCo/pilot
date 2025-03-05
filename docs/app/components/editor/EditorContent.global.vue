@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { type Editor, type Range } from '@tiptap/vue-3'
+import { EditorExtensions } from '@learnvue/pilot'
+import { type Editor } from '@tiptap/vue-3'
 
 const {
   content = '<h1>Example Heading</h1><p>This is an example paragraph.</p>',
@@ -8,6 +9,7 @@ const {
   notProse = false,
   showInput = false,
   fakeHighlight = false,
+  showCommands = false,
 } = defineProps<{
   content?: string
   bubbleMenu?: boolean
@@ -15,12 +17,16 @@ const {
   notProse?: boolean
   showInput?: boolean
   fakeHighlight?: boolean
+  showCommands?: boolean
 }>()
 
-const { editor } = useEditor({
+const { editor, commands } = useEditor({
   editor: {
     content: content,
   },
+  extensions: [
+    ...EditorExtensions(),
+  ],
 })
 
 const { highlight, unhighlight } = useFakeHighlight(editor, {
@@ -56,11 +62,27 @@ function tryUnhighlight() {
           :editor="editor"
           :commands="[]"
           aria-label="Rich text editor"
-          class="h-full"
+          class="h-full "
           :class="{
             'not-prose': notProse,
           }"
         >
+          <Commands v-if="showCommands" :commands="commands" >
+            <template #default="{ editor, commands: commandsProp, selectedIndex, selectItem }">
+              <UButtonGroup orientation="vertical" class="bg-[var(--ui-bg-elevated)]">
+                <UButton v-for="command, index in commandsProp" 
+                  :key="command.id" 
+                  :label="command.label" 
+                  color="neutral" 
+                  variant="ghost" 
+                  @click="selectItem(index)"
+                  :class="{
+                    'bg-white/20': selectedIndex === index,
+                  }" 
+                />
+              </UButtonGroup>
+            </template>
+          </Commands>
           <BubbleMenu v-if="bubbleMenu" @close="tryUnhighlight">
             <template v-if="transitionBubbleMenu" #menu="{ editor, visible }">
               <Transition

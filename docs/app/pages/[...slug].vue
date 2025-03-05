@@ -39,5 +39,5 @@ const slug = computed(() => {
       class="prose dark:prose-invert 3xl:max-w-5xl mt-8 w-full max-w-3xl"
     />
   </div>
-  <AppTableOfContents class="sticky top-12 hidden w-60 pt-6 lg:block" />
+  <AppTableOfContents class="hidden h-[calc(100vh-3.5em)] sticky top-12  w-60 pt-6 lg:block" />
 </template>

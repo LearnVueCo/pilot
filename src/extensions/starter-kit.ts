@@ -17,7 +17,7 @@ export const StarterKitExtension = (
       },
     },
     dropcursor: {
-      color: '#ff00ff',
+      color: '#ffffff',
     },
   }
 

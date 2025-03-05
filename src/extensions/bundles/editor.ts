@@ -46,7 +46,10 @@ export const EditorExtensions = (
   options: EditorExtensionsOptions = {},
 ): AnyExtension[] => {
   return [
-    StarterKitExtension(options.starterKit),
+    StarterKitExtension({
+      codeBlock: false,
+      ...options.starterKit,
+    }),
     TaskItemExtension(options.taskItem),
     TaskListExtension(options.taskList),
     CommandExtension(),
