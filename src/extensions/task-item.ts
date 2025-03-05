@@ -17,11 +17,13 @@ export const TaskItemExtension = (options: TaskItemExtensionOptions = {}) => {
 
   const mergedOptions = defu(options, defaultOptions)
 
+  const customComponent = mergedOptions.customComponent
+
   return TaskItem.configure(mergedOptions).extend(
-    mergedOptions.customComponent
+    customComponent !== undefined
       ? {
           addNodeView() {
-            return VueNodeViewRenderer(mergedOptions.customComponent)
+            return VueNodeViewRenderer(customComponent)
           },
         }
       : {},

@@ -1,6 +1,6 @@
 {
   "name": "@learnvue/pilot",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.1",
   "description": "WYSIWYG editor for Vue",
   "repository": "LearnVueCo/pilot",
   "license": "MIT",
@@ -31,7 +31,9 @@
   "scripts": {
     "build": "unbuild",
     "prepack": "pnpm run build",
-    "docs": "nuxi dev docs"
+    "docs": "nuxi dev docs",
+    "dev": "nuxi dev playground/nuxt",
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.6",
@@ -60,6 +62,7 @@
     "@nuxt/schema": "^3.15.4",
     "@nuxt/test-utils": "^3.15.4",
     "@types/node": "latest",
+    "@vue/tsconfig": "^0.7.0",
     "changelogen": "^0.5.7",
     "eslint": "^9.19.0",
     "nuxt": "^3.15.4",

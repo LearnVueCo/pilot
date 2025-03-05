@@ -10,13 +10,8 @@ export type ImageExtensionOptions = Partial<
 >
 
 export const ImageExtension = (options: ImageExtensionOptions = {}) => {
-  const defaultOptions: Partial<ImageExtensionOptions> = {
-    loadingClass: 'opacity-30 animate-pulse',
-  }
 
-  const mergedOptions = defu(options, defaultOptions)
-
-  const { loadingClass, uploadFn } = mergedOptions
+  const { loadingClass = 'opacity-30 animate-pulse', uploadFn } = options
 
   return Image.configure({
     inline: false,

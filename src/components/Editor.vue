@@ -1,8 +1,7 @@
 <script setup lang="ts" generic="T extends EditorCommand">
 import type { EditorCommand } from '../utils/commands'
 import { EditorContent, type Editor } from '@tiptap/vue-3'
-import { computed, provide, watch } from 'vue'
-import CommandsRoot from './Commands.vue'
+import { computed, provide } from 'vue'
 
 const props = defineProps<{
   editor?: Editor | null

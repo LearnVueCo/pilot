@@ -1,8 +1,10 @@
 {
-  "exclude": ["dist", "node_modules", "playground"],
+"extends": [
+  "@vue/tsconfig/tsconfig.dom.json",
+  "@vue/tsconfig/tsconfig.lib.json"
+],
   "compilerOptions": {
-    "target": "es2020",
-    "module": "esnext",
-    "moduleResolution": "Bundler",
-  }
+    "skipLibCheck": true
+  },
+  "exclude": ["dist", "node_modules", "playground", "docs"],
 }

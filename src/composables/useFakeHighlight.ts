@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { DecorationSet, Decoration } from '@tiptap/pm/view'
 import { type Editor, type Range } from '@tiptap/vue-3'
-import { MaybeRefOrGetter, onBeforeUnmount, onMounted, toValue } from 'vue'
+import { type MaybeRefOrGetter, onBeforeUnmount, onMounted, toValue } from 'vue'
 
 type UseFakeHighlightOptions = {
   highlightClass?: string

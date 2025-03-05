@@ -1,6 +1,5 @@
 import { Extension } from '@tiptap/vue-3'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-
 export type LinkHoverExtensionOptions = {
   /**
    * Called when a mouse enters a link
@@ -30,7 +29,7 @@ export const LinkHoverExtension = (
           props: {
             handleDOMEvents: {
               mouseover(_view, event) {
-                const el = event.target as HTMLElement
+                const el = event.target as HTMLElement & { pmViewDesc?: { posAtStart: number; posAtEnd: number } }
                 if (el.tagName !== 'A') {
                   return
                 }

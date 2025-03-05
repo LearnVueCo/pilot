@@ -139,7 +139,11 @@ function loadImage(file: File): Promise<string | ArrayBuffer> {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => {
-      resolve(reader.result)
+      if (reader.result) {
+        resolve(reader.result)
+      } else {
+        reject(new Error('Failed to load image'))
+      }
     }
     reader.onerror = () => {
       reject(reader.error)

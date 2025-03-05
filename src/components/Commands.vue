@@ -10,13 +10,13 @@ import {
   type MaybeRef,
 } from 'vue'
 import type { Editor, Range } from '@tiptap/vue-3'
-import { SuggestionKeyDownProps } from '@tiptap/suggestion'
+import type { SuggestionKeyDownProps } from '@tiptap/suggestion'
 import {
   flip,
   offset,
   shift,
   useFloating,
-  VirtualElement,
+  type VirtualElement,
 } from '@floating-ui/vue'
 import type { EditorCommand } from '../utils/commands'
 import { Transaction } from '@tiptap/pm/state'
@@ -153,6 +153,9 @@ function enterHandler() {
 }
 
 function selectItem(index: number) {
+  if (!props.commands || !editor) {
+    return
+  }
   const item = props.commands[index]
   if (item && range.value) {
     item.command({ editor: editor, range: range.value })

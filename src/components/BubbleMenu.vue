@@ -12,7 +12,7 @@ import {
   ref,
   useTemplateRef,
   toValue,
-  MaybeRef,
+  type MaybeRef,
   nextTick,
   watch,
 } from 'vue'
@@ -38,15 +38,16 @@ const preventHide = ref(false)
 const pluginKey = new PluginKey('lv-bubble-menu')
 
 const referenceEl = computed<VirtualElement | null>(() => {
-  if (!selectedRange.value) {
+  const range = toValue(selectedRange)
+  if (!range || !editor) {
     return null
   }
   return {
     getBoundingClientRect: () =>
       posToDOMRect(
         editor.view,
-        selectedRange.value.from,
-        selectedRange.value.to,
+        range.from,
+        range.to,
       ),
   }
 })
@@ -57,7 +58,10 @@ watch(isVisible, (value) => {
   }
 })
 
-function shouldShowMenu({ editor }: { editor: Editor }) {
+function shouldShowMenu({ editor }: { editor?: Editor | null }) {
+  if (!editor) {
+    return false
+  }
   const { state } = editor.view
   const { selection, doc } = state
 
@@ -96,7 +100,9 @@ function handleUpdate(view: EditorView) {
     previousSelection?.to !== state.selection?.to
   ) {
     isVisible.value = false
-    clearTimeout(timeout)
+    if (timeout) {
+      clearTimeout(timeout)
+    }
   }
   previousSelection = state.selection
 
@@ -119,6 +125,9 @@ function handleUpdate(view: EditorView) {
   }, delay)
 }
 onMounted(() => {
+  if (!editor) {
+    return
+  }
   editor.on('blur', ({ event }) => {
     // If the menu is has been clicked, don't hide it
     if (preventHide.value) {
@@ -148,6 +157,9 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  if (!editor) {
+    return
+  }
   editor.unregisterPlugin(pluginKey)
 })
 
@@ -161,6 +173,9 @@ function handleFocusin(event: FocusEvent) {
 }
 
 async function handleFocusout(event: FocusEvent) {
+  if (!editor) {
+    return
+  }
   // wait to see if the item is still in the menu
   await nextTick()
   if (menu.value?.contains(event.target as Node)) {

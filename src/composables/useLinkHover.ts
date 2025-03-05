@@ -24,11 +24,11 @@ export function useLinkHover(
   const to = ref<string | null>(null)
   const isHovered = ref(false)
   const reference = ref<Range | null>(null)
-  const hoveredLink = ref<HTMLElement | null>(null)
+  const hoveredLink = ref<HTMLElement & { pmViewDesc?: { posAtStart: number; posAtEnd: number } } | null>(null)
   const pluginKey = new PluginKey('link-hover')
 
   const { start, stop } = useTimeoutFn(
-    (el: HTMLElement) => {
+    (el: HTMLElement & { pmViewDesc?: { posAtStart: number; posAtEnd: number } }) => {
       if (!el) {
         isHovered.value = false
         return
@@ -69,7 +69,7 @@ export function useLinkHover(
               return true
             },
             mouseout(view, event) {
-              const el = event.target as HTMLElement
+              const el = event.target as HTMLElement & { pmViewDesc?: { posAtStart: number; posAtEnd: number } }
               stop()
               // if reference is the same as the hovered element's reference, close the hover
               if (
