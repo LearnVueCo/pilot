@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+.tiptap {
+  @apply outline-none;
+}
+
+.tiptap ul {
+  @apply list-disc pl-4;
+}
+
+
+.tiptap ol {
+  @apply list-decimal pl-4;
+}
+
+.tiptap .is-empty:not(:has(.img-placeholder))::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
