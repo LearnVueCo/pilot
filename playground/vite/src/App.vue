@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useEditor, Editor, BubbleMenu } from '@learnvue/pilot'
+import { usePilot, Editor, BubbleMenu } from '@learnvue/pilot'
 import { EditorExtensions } from '@learnvue/pilot/extensions'
 
-const { editor, commands } = useEditor({
+const { editor, commands } = usePilot({
   editor: {
     content: '<h1>Hello World</h1><p>This is a minimally styled editor.</p>',
   },

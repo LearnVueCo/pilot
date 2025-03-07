@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { EditorExtensions } from '@learnvue/pilot'
-import { type Editor } from '@tiptap/vue-3'
+import { EditorExtensions, usePilot, useFakeHighlight, commandActions } from '@learnvue/pilot'
 
 const {
   content = '<h1>Example Heading</h1><p>This is an example paragraph.</p>',
@@ -20,14 +19,50 @@ const {
   showCommands?: boolean
 }>()
 
-const { editor, commands } = useEditor({
+function getContent() {
+  try {
+    return JSON.parse(content)
+  } catch (error) {
+    return content
+  }
+}
+
+const { editor } = usePilot({
   editor: {
-    content: content,
+    content: getContent(),
   },
   extensions: [
     ...EditorExtensions(),
   ],
 })
+
+const commands = [
+  {
+    id: 'bold',
+    label: 'Bold',
+    command: commandActions.bold,
+  },
+  {
+    id: 'italic',
+    label: 'Italic',
+    command: commandActions.italic,
+  },
+  {
+    id: 'divider',
+    label: 'Divider',
+    command: commandActions.divider,
+  },
+  {
+    id: 'unorderedList',
+    label: 'Unordered List',
+    command: commandActions.unorderedList,
+  },
+  {
+    id: 'orderedList',
+    label: 'Ordered List',
+    command: commandActions.orderedList,
+  },
+]
 
 const { highlight, unhighlight } = useFakeHighlight(editor, {
   highlightClass: 'bg-blue-400/40 py-[2.5px]',
@@ -44,14 +79,28 @@ function tryUnhighlight() {
     unhighlight()
   }
 }
+
+function copyContent() {
+  navigator.clipboard.writeText(JSON.stringify(editor.value?.getJSON()).replace(/'/g, '\\"'))
+}
+
+const link = ref('')
+function addLink() {
+  editor.value?.chain().focus().setLink({ href: link.value }).run()
+}
 </script>
 
 <template>
   <div class="dropped mt-8 mb-12 flex flex-col">
     <div
-      class="relative w-full border border-b-0 border-[var(--ui-border)] bg-[var(--ui-primary-300)] px-6 py-2 font-bold text-[var(--ui-primary-900)]"
+      class="relative flex w-full border border-b-0 border-[var(--ui-border)] bg-[var(--ui-primary-300)] px-6 py-2 font-bold text-[var(--ui-primary-900)]"
     >
       Try it
+      <DevOnly class="ml-auto">
+        <ClientOnly>
+          <UButton icon="i-ri:clipboard-line" @click="copyContent" class="ml-auto" />
+        </ClientOnly>
+      </DevOnly>
     </div>
     <div
       class="relative w-full flex-1 overflow-y-auto border border-[var(--ui-border)] bg-[var(--ui-bg)] p-8"
@@ -60,7 +109,6 @@ function tryUnhighlight() {
         <Editor
           v-if="editor"
           :editor="editor"
-          :commands="[]"
           aria-label="Rich text editor"
           class="h-full "
           :class="{
@@ -128,6 +176,7 @@ function tryUnhighlight() {
                       }"
                       icon="i-ri:italic"
                     />
+                    <UButton icon="i-ri:link" />
                   </UButtonGroup>
                 </div>
               </Transition>
@@ -168,6 +217,25 @@ function tryUnhighlight() {
                   }"
                   icon="i-ri:italic"
                 />
+                <UPopover :portal="false">
+                  <UButton
+                  size="sm"
+                  variant="ghost"
+                  color="neutral"
+                  :class="{
+                    'bg-white/20': editor.isActive('italic'),
+                  }"
+                  icon="i-ri:link"
+                />
+                <template #content>
+                  <form @submit.prevent="addLink">
+                    <UButtonGroup size="lg">
+                      <UInput v-model="link" placeholder="Add a link" />
+                      <UButton type="submit" icon="i-ri:link" />
+                    </UButtonGroup>
+                  </form>
+                </template>
+                </UPopover>
               </UButtonGroup>
             </div>
           </BubbleMenu>

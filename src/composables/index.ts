@@ -1,4 +1,3 @@
-export * from './useEditor'
+export * from './usePilot'
 export * from './useTooltip'
-export * from './useTitle'
 export * from './useFakeHighlight'

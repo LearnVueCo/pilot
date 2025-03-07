@@ -10,12 +10,12 @@ export function useTooltip(
   reference: Ref<HTMLElement | VirtualElement | null>,
   tooltip: Ref<HTMLElement | null>,
 ) {
-  const { floatingStyles } = useFloating(reference, tooltip, {
+  const floating = useFloating(reference, tooltip, {
     placement: 'bottom',
     middleware: [flip(), offset(5)],
   })
 
   return {
-    floatingStyles,
+    ...floating
   }
 }

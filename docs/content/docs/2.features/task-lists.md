@@ -12,10 +12,10 @@ Pilot uses Tiptap's [TaskList](https://tiptap.dev/docs/editor/extensions/functio
 You can also use custom components to render your task list items.
 
 ```ts
-import { EditorExtensions, useEditor } from '@learnvue/pilot'
+import { EditorExtensions, usePilot } from '@learnvue/pilot'
 import CustomTaskItem from './components/CustomTaskItem.vue'
 
-const editor = useEditor({
+const editor = usePilot({
   extensions: [
     ...EditorExtensions({
       taskItem: {

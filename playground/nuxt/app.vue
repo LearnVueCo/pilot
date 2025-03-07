@@ -1,8 +1,19 @@
 <script setup lang="ts">
-const { editor, commands } = useEditor({
+import { EditorExtensions, usePilot, useFakeHighlight } from '@learnvue/pilot'
+
+const { editor } = usePilot({
   editor: {
     content: "<h1>Hello World</h1><p>This is a minimally styled editor.</p>",
   },
+  extensions: [
+    ...EditorExtensions({
+      starterKit: {
+        heading: {
+          levels: [1, 2, 3, 4],
+        },
+      },
+    }),
+  ]
 });
 
 const defaultMode = ref(true);
@@ -17,13 +28,12 @@ const { highlight, unhighlight } = useFakeHighlight(editor, {
 </script>
 
 <template>
-  <Editor
+  <PilotEditor
     :editor="editor"
-    :commands="commands"
     @keydown.esc="highlight()"
     @click.middle="unhighlight()"
   >
-    <BubbleMenu
+    <PilotBubbleMenu
       v-if="editor"
       @close="unhighlight()"
     >
@@ -72,8 +82,8 @@ const { highlight, unhighlight } = useFakeHighlight(editor, {
           </div>
         </Transition>
       </template>
-    </BubbleMenu>
-  </Editor>
+    </PilotBubbleMenu>
+  </PilotEditor>
 </template>
 
 <style>
