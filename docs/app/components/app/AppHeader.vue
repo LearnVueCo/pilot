@@ -3,10 +3,28 @@
     class="sticky top-0 z-100 mx-auto flex h-14 items-center border-b border-[var(--ui-border)] bg-[var(--ui-bg)] px-2 py-4 md:px-6"
   >
     <div class="flex items-center gap-x-2">
-      <div class="items-top flex">
-        <div class="h-5 w-2.5 bg-[var(--ui-primary)]" />
-        <div class="h-2.5 w-2.5 bg-[var(--ui-primary-400)]" />
-      </div>
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+        class="flex items-top"
+      >
+        <rect
+          x="0"
+          y="0"
+          width="10"
+          height="20"
+          fill="var(--ui-primary)"
+        />
+        <rect
+          x="10"
+          y="0"
+          width="10"
+          height="10"
+          fill="var(--ui-primary-400)"
+        />
+      </svg>
       <span class="text-lg font-bold">
         <NuxtLink to="/">Pilot</NuxtLink>
       </span>
