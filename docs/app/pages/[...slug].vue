@@ -22,7 +22,10 @@ const slug = computed(() => {
 </script>
 
 <template>
-  <div class="flex-1 pt-6 pb-32" v-if="page">
+  <div
+    v-if="page"
+    class="flex-1 pt-6 pb-32"
+  >
     <h2 class="text-sm font-bold text-[var(--ui-primary)] capitalize">
       {{ slug }}
     </h2>

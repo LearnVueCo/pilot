@@ -12,7 +12,7 @@ import {
   TextAlignExtension,
   CodeBlockExtension,
   ImageExtension,
-} from '../'
+} from '../../'
 
 import type {
   StarterKitExtensionOptions,
@@ -26,7 +26,7 @@ import type {
   TextAlignExtensionOptions,
   CodeBlockExtensionOptions,
   ImageExtensionOptions,
-} from '../'
+} from '../../'
 
 type EditorExtensionsOptions = {
   starterKit?: StarterKitExtensionOptions

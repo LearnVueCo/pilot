@@ -2,6 +2,7 @@ import {
   defineNuxtModule,
   createResolver,
   addComponentsDir,
+  addImportsDir
 } from '@nuxt/kit'
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -24,6 +25,13 @@ export default defineNuxtModule<ModuleOptions>({
       path: resolver.resolve('./components'),
       prefix: prefix
     })
+
+    addImportsDir([
+      resolver.resolve('./composables'),
+      resolver.resolve('./extensions'),
+      resolver.resolve('./extensions/bundles'),
+      resolver.resolve('./utils'),
+    ])
 
   },
 })

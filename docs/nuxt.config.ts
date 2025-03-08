@@ -1,6 +1,7 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import path from "path"
+
 export default defineNuxtConfig({
-  modules: ['../src/module', '@nuxt/content', '@nuxt/ui'],
+  modules: ['../src/nuxt', '@nuxt/content', '@nuxt/ui'],
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   future: {
@@ -29,4 +30,11 @@ export default defineNuxtConfig({
       globals.forEach((c) => (c.global = true))
     },
   },
+  vite: {
+    resolve: {
+      alias: {
+        '@learnvue/pilot': path.resolve(__dirname, '../src'),
+      },
+    },
+  },    
 })

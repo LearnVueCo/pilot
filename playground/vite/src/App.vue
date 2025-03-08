@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { usePilot, Editor, BubbleMenu } from '@learnvue/pilot'
-import { EditorExtensions } from '@learnvue/pilot/extensions'
+import { usePilot, Editor, BubbleMenu, EditorExtensions } from '@learnvue/pilot'
 
-const { editor, commands } = usePilot({
+const { editor } = usePilot({
   editor: {
     content: '<h1>Hello World</h1><p>This is a minimally styled editor.</p>',
   },
@@ -22,7 +21,7 @@ const { editor, commands } = usePilot({
   <div style="height: 100vh; width: 100vw">
     <Editor
       :editor="editor"
-      :commands="commands"
+      :commands="[]"
       :style="{}"
     >
       <BubbleMenu>
@@ -50,9 +49,6 @@ const { editor, commands } = usePilot({
               >
                 Strike
               </button>
-              <button>s</button>
-              <button>s</button>
-              <button>s</button>
             </div>
           </Transition>
         </template>

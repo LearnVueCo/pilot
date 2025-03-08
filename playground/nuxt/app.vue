@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { EditorExtensions, usePilot, useFakeHighlight } from '@learnvue/pilot'
 
 const { editor } = usePilot({
   editor: {

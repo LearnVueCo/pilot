@@ -22,7 +22,7 @@ const {
 function getContent() {
   try {
     return JSON.parse(content)
-  } catch (error) {
+  } catch (_error) {
     return content
   }
 }
@@ -98,7 +98,11 @@ function addLink() {
       Try it
       <DevOnly class="ml-auto">
         <ClientOnly>
-          <UButton icon="i-ri:clipboard-line" @click="copyContent" class="ml-auto" />
+          <UButton
+            icon="i-ri:clipboard-line"
+            class="ml-auto"
+            @click="copyContent"
+          />
         </ClientOnly>
       </DevOnly>
     </div>
@@ -115,37 +119,53 @@ function addLink() {
             'not-prose': notProse,
           }"
         >
-          <Commands v-if="showCommands" :commands="commands" >
-            <template #default="{ editor, commands: commandsProp, selectedIndex, selectItem }">
-              <UButtonGroup orientation="vertical" class="bg-[var(--ui-bg-elevated)]">
-                <UButton v-for="command, index in commandsProp" 
+          <Commands
+            v-if="showCommands"
+            :commands="commands"
+          >
+            <template #default="{ commands: commandsProp, selectedIndex, selectItem }">
+              <UButtonGroup
+                orientation="vertical"
+                class="bg-[var(--ui-bg-elevated)]"
+              >
+                <UButton
+                  v-for="command, index in commandsProp" 
                   :key="command.id" 
                   :label="command.label" 
                   color="neutral" 
                   variant="ghost" 
-                  @click="selectItem(index)"
                   :class="{
                     'bg-white/20': selectedIndex === index,
-                  }" 
+                  }"
+                  @click="selectItem(index)" 
                 />
               </UButtonGroup>
             </template>
           </Commands>
-          <BubbleMenu v-if="bubbleMenu" @close="tryUnhighlight">
-            <template v-if="transitionBubbleMenu" #menu="{ editor, visible }">
+          <BubbleMenu
+            v-if="bubbleMenu"
+            @close="tryUnhighlight"
+          >
+            <template
+              v-if="transitionBubbleMenu"
+              #menu="{ visible }"
+            >
               <Transition
                 :name="transitionBubbleMenu ? 'fade' : undefined"
                 appear
               >
                 <div v-if="visible">
-                  <div v-if="showInput" class="flex items-center">
+                  <div
+                    v-if="showInput"
+                    class="flex items-center"
+                  >
                     <UInput
                       placeholder="Edit with AI"
-                      @focus="tryHighlight"
                       :ui="{
                         root: '!border-r-0',
                         base: 'rounded-r-none outline-0',
                       }"
+                      @focus="tryHighlight"
                     />
                     <UButton
                       icon="i-ri:sparkling-2-fill"
@@ -157,7 +177,6 @@ function addLink() {
                     class="rounded-lg border border-[var(--ui-border)] bg-[var(--ui-bg-accented)]"
                   >
                     <UButton
-                      @click="editor?.chain().focus().toggleBold().run()"
                       size="sm"
                       variant="ghost"
                       color="neutral"
@@ -165,9 +184,9 @@ function addLink() {
                         'bg-white/20': editor.isActive('bold'),
                       }"
                       icon="i-ri:bold"
+                      @click="editor?.chain().focus().toggleBold().run()"
                     />
                     <UButton
-                      @click="editor?.chain().focus().toggleItalic().run()"
                       size="sm"
                       variant="ghost"
                       color="neutral"
@@ -175,6 +194,7 @@ function addLink() {
                         'bg-white/20': editor.isActive('italic'),
                       }"
                       icon="i-ri:italic"
+                      @click="editor?.chain().focus().toggleItalic().run()"
                     />
                     <UButton icon="i-ri:link" />
                   </UButtonGroup>
@@ -182,23 +202,28 @@ function addLink() {
               </Transition>
             </template>
             <div>
-              <div v-if="showInput" class="flex items-center">
+              <div
+                v-if="showInput"
+                class="flex items-center"
+              >
                 <UInput
                   placeholder="Edit with AI"
-                  @focus="tryHighlight"
                   :ui="{
                     root: '!border-r-0',
                     base: 'rounded-r-none outline-0',
                   }"
+                  @focus="tryHighlight"
                 />
-                <UButton icon="i-ri:sparkling-2-fill" class="rounded-l-none" />
+                <UButton
+                  icon="i-ri:sparkling-2-fill"
+                  class="rounded-l-none"
+                />
               </div>
               <UButtonGroup
                 v-else
                 class="rounded-lg border border-[var(--ui-border)] bg-[var(--ui-bg-accented)]"
               >
                 <UButton
-                  @click="editor?.chain().focus().toggleBold().run()"
                   size="sm"
                   variant="ghost"
                   color="neutral"
@@ -206,9 +231,9 @@ function addLink() {
                     'bg-white/20': editor.isActive('bold'),
                   }"
                   icon="i-ri:bold"
+                  @click="editor?.chain().focus().toggleBold().run()"
                 />
                 <UButton
-                  @click="editor?.chain().focus().toggleItalic().run()"
                   size="sm"
                   variant="ghost"
                   color="neutral"
@@ -216,25 +241,32 @@ function addLink() {
                     'bg-white/20': editor.isActive('italic'),
                   }"
                   icon="i-ri:italic"
+                  @click="editor?.chain().focus().toggleItalic().run()"
                 />
                 <UPopover :portal="false">
                   <UButton
-                  size="sm"
-                  variant="ghost"
-                  color="neutral"
-                  :class="{
-                    'bg-white/20': editor.isActive('italic'),
-                  }"
-                  icon="i-ri:link"
-                />
-                <template #content>
-                  <form @submit.prevent="addLink">
-                    <UButtonGroup size="lg">
-                      <UInput v-model="link" placeholder="Add a link" />
-                      <UButton type="submit" icon="i-ri:link" />
-                    </UButtonGroup>
-                  </form>
-                </template>
+                    size="sm"
+                    variant="ghost"
+                    color="neutral"
+                    :class="{
+                      'bg-white/20': editor.isActive('italic'),
+                    }"
+                    icon="i-ri:link"
+                  />
+                  <template #content>
+                    <form @submit.prevent="addLink">
+                      <UButtonGroup size="lg">
+                        <UInput
+                          v-model="link"
+                          placeholder="Add a link"
+                        />
+                        <UButton
+                          type="submit"
+                          icon="i-ri:link"
+                        />
+                      </UButtonGroup>
+                    </form>
+                  </template>
                 </UPopover>
               </UButtonGroup>
             </div>

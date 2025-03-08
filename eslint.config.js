@@ -5,7 +5,7 @@ import globals from 'globals';
 
 
 export default tseslint.config(
-  { ignores: ['*.d.ts', '**/coverage', '**/dist', "**/.nuxt", 'docs'] },
+  { ignores: ['*.d.ts', '**/coverage', '**/dist', "**/.nuxt"] },
   {
     files: ['**/*.{ts,vue}'],
     languageOptions: {

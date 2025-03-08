@@ -11,6 +11,9 @@
     "noUncheckedSideEffectImports": true,
 
     "baseUrl": ".",
+    "paths": {
+      "@learnvue/pilot": ["../../src"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

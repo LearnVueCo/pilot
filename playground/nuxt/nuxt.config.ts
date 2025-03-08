@@ -1,8 +1,17 @@
+import path from 'path'
+
 export default defineNuxtConfig({
-  modules: ['@learnvue/pilot/nuxt'],
+  modules: ['../../src/nuxt'],
   devtools: { enabled: true },
   compatibilityDate: '2025-02-07',
   pilot: {
     prefix: 'Pilot'
+  },
+  vite: {
+    resolve: {
+      alias: {
+        '@learnvue/pilot': path.resolve(__dirname, '../../src'),
+      }
+    }
   }
 })
