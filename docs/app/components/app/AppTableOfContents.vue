@@ -81,8 +81,8 @@ onUnmounted(() => {
               :to="`#${child.id}`"
               class="opacity-70 hover:opacity-100"
               :class="{
-                'text-[var(--ui-primary)] opacity-100': visibleTargetIds.includes(item.id),
-                'opacity-70 hover:opacity-100': !visibleTargetIds.includes(item.id),
+                'text-[var(--ui-primary)] opacity-100': visibleTargetIds.includes(child.id),
+                'opacity-70 hover:opacity-100': !visibleTargetIds.includes(child.id),
               }"
             >
               {{ child.text }}
