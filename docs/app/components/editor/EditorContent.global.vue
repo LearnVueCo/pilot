@@ -147,108 +147,46 @@ function addLink() {
               </template>
             </Commands>
           </Transition>
-          <BubbleMenu
-            v-if="bubbleMenu"
-            @close="tryUnhighlight"
+          <Transition
+            :name="transitionBubbleMenu ? 'fade' : undefined"
+            :duration="transitionBubbleMenu ? 200 : 0"
           >
-            <template
-              v-if="transitionBubbleMenu"
-              #menu="{ visible }"
+            <BubbleMenu
+              v-if="bubbleMenu"
+              @close="tryUnhighlight"
             >
-              <Transition
-                :name="transitionBubbleMenu ? 'fade' : undefined"
-                appear
-              >
-                <div v-if="visible">
-                  <div
-                    v-if="showInput"
-                    class="flex items-center"
-                  >
-                    <UInput
-                      placeholder="Edit with AI"
-                      :ui="{
-                        root: '!border-r-0',
-                        base: 'rounded-r-none outline-0',
-                      }"
-                      @focus="tryHighlight"
-                    />
-                    <UButton
-                      icon="i-ri:sparkling-2-fill"
-                      class="rounded-l-none"
-                    />
-                  </div>
-                  <UButtonGroup
-                    v-else
-                    class="rounded-lg border border-[var(--ui-border)] bg-[var(--ui-bg-accented)]"
-                  >
-                    <UButton
-                      size="sm"
-                      variant="ghost"
-                      color="neutral"
-                      :class="{
-                        'bg-white/20': editor.isActive('bold'),
-                      }"
-                      icon="i-ri:bold"
-                      @click="editor?.chain().focus().toggleBold().run()"
-                    />
-                    <UButton
-                      size="sm"
-                      variant="ghost"
-                      color="neutral"
-                      :class="{
-                        'bg-white/20': editor.isActive('italic'),
-                      }"
-                      icon="i-ri:italic"
-                      @click="editor?.chain().focus().toggleItalic().run()"
-                    />
-                    <UButton icon="i-ri:link" />
-                  </UButtonGroup>
+              <div class="inner">
+                <div
+                  v-if="showInput"
+                  class="flex items-center"
+                >
+                  <UInput
+                    placeholder="Edit with AI"
+                    :ui="{
+                      root: '!border-r-0',
+                      base: 'rounded-r-none outline-0',
+                    }"
+                    @focus="tryHighlight"
+                  />
+                  <UButton
+                    icon="i-ri:sparkling-2-fill"
+                    class="rounded-l-none"
+                  />
                 </div>
-              </Transition>
-            </template>
-            <div>
-              <div
-                v-if="showInput"
-                class="flex items-center"
-              >
-                <UInput
-                  placeholder="Edit with AI"
-                  :ui="{
-                    root: '!border-r-0',
-                    base: 'rounded-r-none outline-0',
-                  }"
-                  @focus="tryHighlight"
-                />
-                <UButton
-                  icon="i-ri:sparkling-2-fill"
-                  class="rounded-l-none"
-                />
-              </div>
-              <UButtonGroup
-                v-else
-                class="rounded-lg border border-[var(--ui-border)] bg-[var(--ui-bg-accented)]"
-              >
-                <UButton
-                  size="sm"
-                  variant="ghost"
-                  color="neutral"
-                  :class="{
-                    'bg-white/20': editor.isActive('bold'),
-                  }"
-                  icon="i-ri:bold"
-                  @click="editor?.chain().focus().toggleBold().run()"
-                />
-                <UButton
-                  size="sm"
-                  variant="ghost"
-                  color="neutral"
-                  :class="{
-                    'bg-white/20': editor.isActive('italic'),
-                  }"
-                  icon="i-ri:italic"
-                  @click="editor?.chain().focus().toggleItalic().run()"
-                />
-                <UPopover :portal="false">
+                <UButtonGroup
+                  v-else
+                  class="rounded-lg border border-[var(--ui-border)] bg-[var(--ui-bg-accented)]"
+                >
+                  <UButton
+                    size="sm"
+                    variant="ghost"
+                    color="neutral"
+                    :class="{
+                      'bg-white/20': editor.isActive('bold'),
+                    }"
+                    icon="i-ri:bold"
+                    @click="editor?.chain().focus().toggleBold().run()"
+                  />
                   <UButton
                     size="sm"
                     variant="ghost"
@@ -256,26 +194,38 @@ function addLink() {
                     :class="{
                       'bg-white/20': editor.isActive('italic'),
                     }"
-                    icon="i-ri:link"
+                    icon="i-ri:italic"
+                    @click="editor?.chain().focus().toggleItalic().run()"
                   />
-                  <template #content>
-                    <form @submit.prevent="addLink">
-                      <UButtonGroup size="lg">
-                        <UInput
-                          v-model="link"
-                          placeholder="Add a link"
-                        />
-                        <UButton
-                          type="submit"
-                          icon="i-ri:link"
-                        />
-                      </UButtonGroup>
-                    </form>
-                  </template>
-                </UPopover>
-              </UButtonGroup>
-            </div>
-          </BubbleMenu>
+                  <UPopover :portal="false">
+                    <UButton
+                      size="sm"
+                      variant="ghost"
+                      color="neutral"
+                      :class="{
+                        'bg-white/20': editor.isActive('italic'),
+                      }"
+                      icon="i-ri:link"
+                    />
+                    <template #content>
+                      <form @submit.prevent="addLink">
+                        <UButtonGroup size="lg">
+                          <UInput
+                            v-model="link"
+                            placeholder="Add a link"
+                          />
+                          <UButton
+                            type="submit"
+                            icon="i-ri:link"
+                          />
+                        </UButtonGroup>
+                      </form>
+                    </template>
+                  </UPopover>
+                </UButtonGroup>
+              </div>
+            </BubbleMenu>
+          </Transition>
         </Editor>
       </ClientOnly>
     </div>

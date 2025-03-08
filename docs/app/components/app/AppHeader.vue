@@ -22,7 +22,7 @@
           y="0"
           width="10"
           height="10"
-          fill="var(--ui-primary-400)"
+          fill="#DFB128"
         />
       </svg>
       <span class="text-lg font-bold">

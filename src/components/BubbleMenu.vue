@@ -154,6 +154,9 @@ onMounted(() => {
       },
     }),
   )
+  setTimeout(() => {
+    // debugger;
+  }, 5000)
 })
 
 onBeforeUnmount(() => {
@@ -187,34 +190,26 @@ async function handleFocusout(event: FocusEvent) {
 
 <template>
   <div
-    v-if="editor && (isVisible || $slots['menu'])"
+    v-if="editor && isVisible"
     ref="menu"
     class="bubble-menu"
     :style="floatingStyles"
-    style="z-index: 100"
+    style="z-index: 50"
     :data-state="isVisible ? 'open' : 'closed'"
     @mousedown.capture="handleMousedown"
     @focusin="handleFocusin"
     @focusout="handleFocusout"
   >
-    <slot
-      :visible="isVisible"
-      name="menu"
-      :editor="editor"
-    >
-      <div v-if="isVisible">
-        <slot :editor="editor">
-          <button
-            style="cursor: pointer"
-            @click="editor.chain().focus().toggleBold().run()"
-          >
-            Bold
-          </button>
-          <button @click="editor.chain().focus().toggleItalic().run()">
-            Italic
-          </button>
-        </slot>
-      </div>
+    <slot :editor="editor">
+      <button
+        style="cursor: pointer"
+        @click="editor.chain().focus().toggleBold().run()"
+      >
+        Bold
+      </button>
+      <button @click="editor.chain().focus().toggleItalic().run()">
+        Italic
+      </button>
     </slot>
   </div>
 </template>

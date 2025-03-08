@@ -18,7 +18,7 @@ function formatNav(items: ContentNavigationItem[]): NavigationMenuItem[] {
 }
 
 const formattedNav = computed(() => {
-  return formatNav(navTree.value ? navTree.value?.[1].children : [])
+  return formatNav( navTree.value?.[1]?.children ?? [])
 })
 </script>
 
@@ -26,6 +26,7 @@ const formattedNav = computed(() => {
   <UNavigationMenu
     :items="formattedNav"
     orientation="vertical"
+    highlight
     :ui="{
       link: 'font-[400] before:!bg-transparent',
     }"
