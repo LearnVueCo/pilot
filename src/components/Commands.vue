@@ -166,7 +166,6 @@ function selectItem(index: number) {
 <template>
   <div
     v-if="position.active"
-    id="pilot-commands__root"
     ref="floating"
     class="dropdown-menu"
     :style="{
@@ -175,7 +174,7 @@ function selectItem(index: number) {
       left: '0',
       transform: `translate(${x ?? 0}px, ${y ?? 0}px)`,
       display: position.active ? 'block' : 'none',
-      zIndex: 100,
+      zIndex: 50,
     }"
   >
     <slot

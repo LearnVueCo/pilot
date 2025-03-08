@@ -119,29 +119,34 @@ function addLink() {
             'not-prose': notProse,
           }"
         >
-          <Commands
-            v-if="showCommands"
-            :commands="commands"
+          <Transition
+            name="fade"
+            :duration="200"
           >
-            <template #default="{ commands: commandsProp, selectedIndex, selectItem }">
-              <UButtonGroup
-                orientation="vertical"
-                class="bg-[var(--ui-bg-elevated)]"
-              >
-                <UButton
-                  v-for="command, index in commandsProp" 
-                  :key="command.id" 
-                  :label="command.label" 
-                  color="neutral" 
-                  variant="ghost" 
-                  :class="{
-                    'bg-white/20': selectedIndex === index,
-                  }"
-                  @click="selectItem(index)" 
-                />
-              </UButtonGroup>
-            </template>
-          </Commands>
+            <Commands
+              v-if="showCommands"
+              :commands="commands"
+            >
+              <template #default="{ commands: commandsProp, selectedIndex, selectItem }">
+                <UButtonGroup
+                  orientation="vertical"
+                  class="bg-[var(--ui-bg-elevated)] inner"
+                >
+                  <UButton
+                    v-for="command, index in commandsProp" 
+                    :key="command.id" 
+                    :label="command.label" 
+                    color="neutral" 
+                    variant="ghost" 
+                    :class="{
+                      'bg-white/20': selectedIndex === index,
+                    }"
+                    @click="selectItem(index)" 
+                  />
+                </UButtonGroup>
+              </template>
+            </Commands>
+          </Transition>
           <BubbleMenu
             v-if="bubbleMenu"
             @close="tryUnhighlight"
@@ -278,19 +283,19 @@ function addLink() {
 </template>
 
 <style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.3s ease;
+.fade-enter-active .inner,
+.fade-leave-active .inner {
+  transition: all 0.2s ease;
 }
 
-.fade-enter-to,
-.fade-leave-from {
+.fade-enter-to .inner,
+.fade-leave-from .inner {
   opacity: 1;
   scale: 1;
 }
 
-.fade-enter-from,
-.fade-leave-to {
+.fade-enter-from .inner,
+.fade-leave-to .inner {
   opacity: 0;
   scale: 0.9;
 }

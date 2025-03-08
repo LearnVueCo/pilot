@@ -26,21 +26,23 @@ const slug = computed(() => {
     v-if="page"
     class="flex-1 pt-6 pb-32"
   >
-    <h2 class="text-sm font-bold text-[var(--ui-primary)] capitalize">
-      {{ slug }}
-    </h2>
-    <h1
-      class="mt-2 text-4xl font-extrabold text-[var(--ui-text-highlight)] capitalize"
-    >
-      {{ page.title }}
-    </h1>
-    <p class="mt-2 text-lg font-semibold text-[var(--ui-text)] opacity-70">
-      {{ page.subheading }}
-    </p>
-    <ContentRenderer
-      :value="page"
-      class="prose dark:prose-invert 3xl:max-w-5xl mt-8 w-full max-w-3xl"
-    />
+    <main class="mx-auto max-w-3xl px-4">
+      <h2 class="text-sm font-bold text-[var(--ui-primary)] capitalize">
+        {{ slug }}
+      </h2>
+      <h1
+        class="mt-2 text-4xl font-extrabold text-[var(--ui-text-highlight)] capitalize"
+      >
+        {{ page.title }}
+      </h1>
+      <p class="mt-2 text-lg font-semibold text-[var(--ui-text)] opacity-70">
+        {{ page.subheading }}
+      </p>
+      <ContentRenderer
+        :value="page"
+        class="prose dark:prose-invert max-w-none mt-8 w-full "
+      />
+    </main>
   </div>
   <AppTableOfContents class="hidden h-[calc(100vh-3.5em)] sticky top-12  w-60 pt-6 lg:block" />
 </template>

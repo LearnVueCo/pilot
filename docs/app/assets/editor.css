@@ -70,7 +70,7 @@
 
 /* Dropdown menu */
 .dropdown-menu {
-  @apply flex flex-col gap-1 overflow-auto rounded-md bg-[var(--ui-bg-elevated)] shadow-lg;
+  @apply flex flex-col gap-1 overflow-auto rounded-md  shadow-lg;
 }
 
 .dropdown-menu button {
