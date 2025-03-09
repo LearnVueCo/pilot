@@ -16,7 +16,6 @@ export const PlaceholderExtension = (
       }
       return "Start typing, press '/' for commands"
     },
-    includeChildren: false,
   }
 
   const mergedOptions = defu(options, defaultOptions)

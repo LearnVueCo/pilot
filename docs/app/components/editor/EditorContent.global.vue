@@ -84,10 +84,11 @@ function copyContent() {
   navigator.clipboard.writeText(JSON.stringify(editor.value?.getJSON()).replace(/'/g, '\\"'))
 }
 
-const link = ref('')
-function addLink() {
-  editor.value?.chain().focus().setLink({ href: link.value }).run()
+function addLink(link: string) {
+  editor.value?.chain().focus().setLink({ href: link }).run()
 }
+
+const linkOpen = ref(false)
 </script>
 
 <template>
@@ -114,7 +115,7 @@ function addLink() {
           v-if="editor"
           :editor="editor"
           aria-label="Rich text editor"
-          class="h-full "
+          class="h-full [&_.tiptap]:pb-16 "
           :class="{
             'not-prose': notProse,
           }"
@@ -153,6 +154,7 @@ function addLink() {
           >
             <BubbleMenu
               v-if="bubbleMenu"
+              :force-open="linkOpen"
               @close="tryUnhighlight"
             >
               <div class="inner">
@@ -197,7 +199,7 @@ function addLink() {
                     icon="i-ri:italic"
                     @click="editor?.chain().focus().toggleItalic().run()"
                   />
-                  <UPopover :portal="false">
+                  <UPopover v-model:open="linkOpen">
                     <UButton
                       size="sm"
                       variant="ghost"
@@ -208,24 +210,14 @@ function addLink() {
                       icon="i-ri:link"
                     />
                     <template #content>
-                      <form @submit.prevent="addLink">
-                        <UButtonGroup size="lg">
-                          <UInput
-                            v-model="link"
-                            placeholder="Add a link"
-                          />
-                          <UButton
-                            type="submit"
-                            icon="i-ri:link"
-                          />
-                        </UButtonGroup>
-                      </form>
+                      <EditorLinkEdit @submit="addLink($event)" />
                     </template>
                   </UPopover>
                 </UButtonGroup>
               </div>
             </BubbleMenu>
           </Transition>
+          <EditorLinkTooltip :editor="editor" />
         </Editor>
       </ClientOnly>
     </div>

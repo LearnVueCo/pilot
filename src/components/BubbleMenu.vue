@@ -22,6 +22,7 @@ import { EditorView } from '@tiptap/pm/view'
 
 const { delay = 350 } = defineProps<{
   delay?: number
+  forceOpen?: boolean
 }>()
 const emit = defineEmits<{
   close: []
@@ -190,7 +191,7 @@ async function handleFocusout(event: FocusEvent) {
 
 <template>
   <div
-    v-if="editor && isVisible"
+    v-if="editor && (isVisible || forceOpen)"
     ref="menu"
     class="bubble-menu"
     :style="floatingStyles"
