@@ -26,7 +26,7 @@
   "scripts": {
     "build": "unbuild",
     "prepack": "pnpm run build",
-    "docs": "nuxi dev docs",
+    "docs": "nuxi dev docs --port 4000",
     "dev": "nuxi dev playground/nuxt",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint ."

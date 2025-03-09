@@ -1,5 +1,6 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
+@import "tailwindcss" theme(static);
+
+@import "@nuxt/ui-pro";
 
 @plugin "@tailwindcss/typography";
 
@@ -120,6 +121,7 @@
   --ui-border-accented: var(--color-gray-800);
   --ui-bg-elevated: var(--color-gray-50);
   --ui-bg-accented: var(--color-gray-100);
+  --ui-bg-muted: var(--color-gray-200);
 }
 
 .dark {
@@ -133,8 +135,8 @@
   /* Most prominent text */
   --ui-text-highlighted: var(--ui-color-white);
   --ui-bg: var(--color-gray-950);
-  --ui-bg-elevated: var(--color-gray-800);
-  --ui-bg-accented: var(--color-gray-900);
+  --ui-bg-elevated: var(--color-gray-900);
+  --ui-bg-accented: var(--color-gray-800);
   --ui-bg-muted: var(--color-gray-900);
 
   --ui-border: var(--color-gray-800);
@@ -173,10 +175,4 @@
   @apply content-['']
 }
 
-.prose  code:not(pre code) {
-  @apply bg-gray-900 px-2 mx-0.5 py-1 rounded;
-}
 
-.prose a code:not(pre code) {
-  @apply border border-dashed border-[var(--ui-primary-800)];
-}

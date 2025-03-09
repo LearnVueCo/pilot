@@ -1,7 +1,7 @@
 import path from "path"
 
 export default defineNuxtConfig({
-  modules: ['../src/nuxt', '@nuxt/content', '@nuxt/ui'],
+  modules: ['../src/nuxt',  '@nuxt/ui-pro', '@nuxt/content',],
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   future: {
@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   hooks: {
     'components:extend': (components) => {
       const globals = components.filter((c) =>
-        ['UButton', 'UIcon', 'UAlert'].includes(c.pascalName),
+        ['UButton', 'UIcon', 'UAlert',].includes(c.pascalName),
       )
 
       globals.forEach((c) => (c.global = true))
