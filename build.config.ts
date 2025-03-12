@@ -23,5 +23,5 @@ export default {
       ext: 'mjs',
     },
   ],
-  declaration: true,
+  declaration: true
 }

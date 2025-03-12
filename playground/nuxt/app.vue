@@ -24,9 +24,19 @@ function handleAnotherClick() {
 const { highlight, unhighlight } = useFakeHighlight(editor, {
   highlightClass: "bg-blue",
 });
+
+const val = ref("");
 </script>
 
 <template>
+  <input
+    type="text"
+    :model-value="val"
+    @update:model-value="
+      val = $event
+    "
+  >
+  </input>
   <PilotEditor
     :editor="editor"
     @keydown.esc="highlight()"

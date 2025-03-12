@@ -16,16 +16,22 @@ export default defineNuxtModule<ModuleOptions>({
   },
   // Default configuration options of the Nuxt module
   defaults: {},
-  setup(options, _nuxt) {
+  setup(options, nuxt) {
+    const optimizeDeps = nuxt.options.vite.optimizeDeps
+    nuxt.options.vite.optimizeDeps = {
+      include: [...(optimizeDeps?.include ?? []), 'tiptap-markdown'],
+      exclude: [...(optimizeDeps?.exclude ?? []), '@tiptap/pm'],
+    }
     const resolver = createResolver(import.meta.url)
 
     const prefix = options.prefix || ''
 
     addComponentsDir({
       path: resolver.resolve('./components'),
-      prefix: prefix
+      prefix: prefix,
+      ignore: ['**/*.!(vue)'],
     })
-
+  
     addImportsDir([
       resolver.resolve('./composables'),
       resolver.resolve('./extensions'),

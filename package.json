@@ -1,6 +1,6 @@
 {
   "name": "@learnvue/pilot",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "description": "WYSIWYG editor for Vue",
   "repository": "LearnVueCo/pilot",
   "license": "MIT",
@@ -8,8 +8,11 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.mjs"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.mjs"
     },
     "./nuxt": {
       "types": "./dist/nuxt.d.ts",
@@ -50,6 +53,9 @@
     "tiptap-extension-code-block-shiki": "^0.4.0",
     "tiptap-extension-global-drag-handle": "^0.1.16",
     "tiptap-markdown": "^0.8.10"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
   },
   "devDependencies": {
     "@nuxt/devtools": "^2.0.0",

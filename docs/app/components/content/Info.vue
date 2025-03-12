@@ -12,7 +12,10 @@
       }"
     >
       <template #description>
-        <MDCSlot :use="$slots.default" unwrap="p" />
+        <MDCSlot
+          :use="$slots.default"
+          unwrap="p"
+        />
       </template>
     </UAlert>
   </div>

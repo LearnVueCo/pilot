@@ -25,11 +25,6 @@
   --color-aquamarine-900: #005448;
   --color-aquamarine-950: #002f2a;
 
-
-
-
-
-
   --color-gray-50: #dde2e3;
   --color-gray-100: #d5dbdc;
   --color-gray-200: #bec8cb;
@@ -38,8 +33,8 @@
   --color-gray-500: #5a676d;
   --color-gray-600: #444e55;
   --color-gray-700: #343b41;
-  --color-gray-800: #292e32;
-  --color-gray-900: #13161b;
+  --color-gray-800: #161B21;
+  --color-gray-900: #0E1115;
   --color-gray-950: #0A0C0F;
   --font-sans: Geist, -apple-system, sans-serif;
   --font-mono: Dank Mono, monospace;
@@ -68,7 +63,7 @@
   --color-green-900: #074d35;
   --color-green-950: #032b1f;
 
-  --ui-primary: var(--color-aquamarine-400);
+  --ui-primary: var(--color-aquamarine-500);
   --ui-primary-100: var(--color-aquamarine-100);
   --ui-primary-200: var(--color-aquamarine-200);
   --ui-primary-300: var(--color-aquamarine-300);
@@ -117,14 +112,16 @@
   --ui-text-muted: var(--color-gray-700);
 
   --ui-bg: var(--color-white);
-  --ui-border: var(--color-gray-800);
+  --ui-border: var(--color-gray-300);
   --ui-border-accented: var(--color-gray-800);
   --ui-bg-elevated: var(--color-gray-50);
   --ui-bg-accented: var(--color-gray-100);
-  --ui-bg-muted: var(--color-gray-200);
+  --ui-bg-muted: var(--color-white);
 }
 
 .dark {
+  --ui-primary: var(--color-aquamarine-400);
+
   --ui-text-dimmed: var(--ui-color-gray-500);
   /* Slightly muted text */
   --ui-text-muted: var(--ui-color-gray-300);
@@ -156,11 +153,11 @@
 }
 
 .prose pre {
-  @apply bg-gray-900/50;
+  @apply dark:bg-gray-900/20 bg-gray-900;
 }
 
 .prose h1 a, .prose h2 a, .prose h3 a, .prose h4 a, .prose h5 a, .prose h6 a {
-  @apply no-underline font-bold text-white;
+  @apply no-underline font-bold text-[var(--ui-text-highlighted)];
 }
 
 .prose a{
@@ -168,7 +165,7 @@
 }
 
 .prose a:has(code) {
-  @apply text-[var(--ui-primary)] hover:opacity-70 transition-opacity no-underline hover:no-underline;
+  @apply text-[var(--ui-primary)] hover:opacity-70 transition-opacity no-underline hover:!no-underline;
 }
 
 .prose code:not(pre code)::before, .prose code:not(pre code)::after {

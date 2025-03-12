@@ -15,6 +15,8 @@
         label="Table of contents"
       />
     </div>
-    <template #content> <AppTableOfContents class="pb-8" /> </template>
+    <template #content>
+      <AppTableOfContents class="pb-8" />
+    </template>
   </UCollapsible>
 </template>
